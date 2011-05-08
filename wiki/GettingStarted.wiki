@@ -1,6 +1,6 @@
-#summary Geting started with JNLua
+#summary Geting Started
 
- h1. Installing JNLua 
+h1. Installing JNLua 
 
 JNLua can be [downloaded|http://www.naef.com/jnlua/download] from its web site. The download directory contains three types of assemblies:
  
@@ -42,8 +42,6 @@ java -classpath jnlua-{version}.jar com.naef.jnlua.console.LuaConsole
 
 To exit the console, terminate the input. On Windows, this is accomplished by typing *F6* followed by *Enter*. On Linux, type *Ctrl+D*.
  
-
-
 
 
 
