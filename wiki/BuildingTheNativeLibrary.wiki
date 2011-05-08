@@ -1,0 +1,58 @@
+#summary Building the Native Library
+
+
+JNLua uses a native library which integrates Lua with Java by means of the Java Native API (JNI). The native library is written in ANSI C and invokes the actual Lua implementation provided by a shared Lua library.
+ 
+The sources of the native library are part of the [[src]] assembly that is downloadable from the JNLua web site. The assembly contains the following directories that are relevant for building the native library:
+ 
+|| Directory || Description || 
+| native/src | C sources of the native library | 
+| native/<platform> | Makefiles for various platforms | 
+
+Currently, JNLua provides Makefiles for the Windows, Linux and MacOSX platforms. The build process is deliberately kept simple. It should therefore be relatively easy to adapt a Makefile for a platform that is not supported out-of-the-box by JNLua from one of the existing Makefiles.
+ 
+{tip:title=Shared Lua Library}Building the JNLua native library requires a shared Lua library. For many platforms, you can download a shared Lua library from the [LuaBinaries project|http://luabinaries.sourceforge.net/] web site. Many Linux distributions provide the shared Lua library as a package.{tip}
+ 
+{info:title=Lua Version}JNLua 0.9 requires Lua 5.1.{info} 
+
+To build the native library for a platform, change into the appropriate directory and edit the Makefile to customize the paths for your environment. The paths typically define the location of the shared Lua library on your system as well as the location of the Java Development Kit (JDK). When the paths are set correctly, run *make* from the platform directory. On the Windows platform, open the _Visual Studio Command Prompt_ from the Start Menu and then run *nmake* from the platform directory.
+ 
+The Makefiles compile the JNLua native library from its sources to an object file. In the next step, the object file is dynamically linked with shared Lua library to build the final JNLua native library. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
