@@ -1,0 +1,82 @@
+#summary Geting started with JNLua
+
+ h1. Installing JNLua 
+
+JNLua can be [downloaded|http://www.naef.com/jnlua/download] from its web site. The download directory contains three types of assemblies:
+ 
+* {{bin}}: these contain the JNLua Java library as a JAR file 
+* {{native}}: these contain pre-built versions of the JNLua native library 
+* {{src}}: these contain the JNLua source code 
+
+To get started, you will need at least a {{bin}} file and either a {{native}} or {{src}} file depending on whether you are using a pre-built JNLua native library or building the native library yourself.
+ 
+{info:title=JNLua Native Library}The JNLua project currently provides pre-built native libraries for Windows and Linux platforms on both 32-bit and 64-archiectures. See [Building The Native Library] for information on how to build the JNLua native library on other platforms.{info}
+ 
+{note:title=Installation Directory}The JNLua native library must be placed in a location where is is found by the Java Virtual machine. Typical locations include:
+ 
+* *Win32*: {{C:\Windows\System32}} 
+* *Linux*: {{/usr/lib}} 
+* *MacOSX*: {{/Library/Java/Extensions}} 
+
+See your JVM documentation for a list of these locations on your platform. As as alternative, you can ensure that the location where you have installed the JNLua native library is on your {{java.library.path}}.{note}
+ 
+h1. Installing the Lua Library 
+
+The JNLua native library requires Lua as a shared library. Depending on your environment, you can install the shared Lua library via a package manager, download it from the [LuaBinaries|http://luaforge.net/projects/luabinaries/] project, or compile the [Lua source code|http://www.lua.org/download.html] into a shared library yourself.
+ 
+{info:title=Lua Version}JNLua 0.9 requires Lua 5.1.{info} 
+
+{note:title=Installation Directory}The Lua library must be placed in a location where is is found when the Java Virtual Machine loads the JNLua native library. Typical locations inlcude:
+ 
+* *Win32*: {{C:\Windows\System32}} 
+* *Linux*: {{/usr/lib}} 
+* *MacOSX*: {{/usr/lib}}{note} 
+
+h1. Launching the JNLua Console 
+
+To launch the JNLua console, type the following in the directory where {{jnlua-\{version}.jar}} is installed:
+ 
+{code} 
+java -classpath jnlua-{version}.jar com.naef.jnlua.console.LuaConsole 
+{code} 
+
+To exit the console, terminate the input. On Windows, this is accomplished by typing *F6* followed by *Enter*. On Linux, type *Ctrl+D*.
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
