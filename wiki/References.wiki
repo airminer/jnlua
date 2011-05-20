@@ -2,46 +2,8 @@
 
 You may want to consult the following references if you are interested in JNLua:
  
-* [The Programming Language Lua|http://www.lua.org/] 
-* [Lua 5.1 Reference Manual|http://www.lua.org/manual/5.1/] 
-* [Programming in Lua, Second Edition|http://www.lua.org/docs.html#books] 
-* [JSR 223: Scripting for the Java Platform|http://www.jcp.org/en/jsr/detail?id=223]
- * [LuaBinaries project|http://luaforge.net/projects/luabinaries/] 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  * [http://www.lua.org/ The Programming Language Lua]
+  * [http://www.lua.org/manual/5.1/ Lua 5.1 Reference Manual]
+  * [http://www.lua.org/docs.html#books Programming in Lua, Second Edition]
+  * [http://www.jcp.org/en/jsr/detail?id=223 JSR 223: Scripting for the Java Platform]
+  * [http://luaforge.net/projects/luabinaries/ LuaBinaries project]
