@@ -1,106 +1,108 @@
 #summary Java Module
 
 The Java module provides a small set of Lua functions for interacting with Java.
+
+<wiki:toc max_depth="1" />
  
-h1. java.require 
+=`java.require`=
 
 Syntax: 
-{code} 
+{{{
 type, imported = java.require(typeName [, import = false]) 
-{code} 
+}}}
 
-The function returns the named Java type. The type name can be one of the eight Java primitive types ({{byte}}, etc.) or a qualified class name or interface name in dot notation. Member types are separated from their parent by {{$}}. More formally, the type name is a _binary name_ as defined by the Java Language Specification.
- 
-If the import flag is asserted, the function imports the Java type into the Lua namespace. For example, {{java.require("java.lang.System", true)}} causes the named class to be accessible as {{java.lang.System}} after the function returns.
- 
+The function returns the named Java type. The type name can be one of the eight Java primitive types (`byte`, etc.) or a qualified class name or interface name in dot notation. Member types are separated from their parent by `$`. More formally, the type name is a _binary name_ as defined by the Java Language Specification.
+
+If the import flag is asserted, the function imports the Java type into the Lua namespace. For example, `java.require("java.lang.System", true)` causes the named class to be accessible as `java.lang.System` after the function returns.
+
 The function returns the type and a boolean value indicating whether the type was imported into the Lua namespace. The second return value corresponds to the import flag.
- 
+
 Examples: 
-{code} 
+{{{
 System = java.require("java.lang.System") 
 System:currentTimeMillis() 
-{code} 
+}}}
 
-{code} 
+{{{
 java.require("java.lang.System", true) 
 java.lang.System:currentTimeMillis() 
-{code} 
+}}}
 
-h1. java.new 
+=`java.new`=
 
 Syntax: 
-{code} 
+{{{
 array = java.new(type|typeName {, dimension}) 
-{code} 
+}}}
 
-The function creates and returns an array of the specified type and with the specified dimensions. The type can be specified as a type or as a type name. The semantics for type names are the same as in the {{java.require}} function. If no dimensions are specified, the function invokes the no-args constructor of the type.
- 
+The function creates and returns an array of the specified type and with the specified dimensions. The type can be specified as a type or as a type name. The semantics for type names are the same as in the `java.require` function. If no dimensions are specified, the function invokes the no-args constructor of the type.
+
 Examples: 
-{code} 
+{{{
 byteArray = java.new("byte", 10) 
-{code} 
+}}}
 
-{code} 
+{{{
 objectClass = java.require("java.lang.Object") 
 objectArray = java.new(objectClass, 10) 
-{code} 
+}}}
 
-{code} 
+{{{
 object = java.new(objectClass) -- same as objectClass:new() 
-{code} 
+}}}
 
-h1. java.instanceof 
+=`java.instanceof`=
 
 Syntax: 
-{code} 
+{{{
 isInstanceOf = java.instanceof(object, type|typeName) 
-{code} 
+}}}
 
 The function tests and returns if the passed object is an instance of the specified type. The type can be specified as a type or as a type name. The semantics for type names are the same as in the java.require() function.
- 
+
 Examples: 
-{code} 
+{{{
 Object = java.require("java.lang.Object") 
 object = Object:new() 
 assert(java.instanceof(object, Object)) 
 assert(java.instanceof(object, "java.lang.Object")) 
-{code} 
+}}}
 
-{code} 
+{{{
 byteArray = java.new("byte", 10) 
 assert(not java.instanceof(byteArray, "byte")) -- byte \!= byte\[\] 
-{code} 
+}}}
 
-h1. java.cast 
+=`java.cast`=
 
 Syntax: 
-{code} 
+{{{
 typedObject = java.cast(value, type|typeName) 
-{code} 
+}}}
 
-The functions casts the passed value to the specified type and returns a typed object. The type can be specified as a type or as a type name. The semantics for type names are the same as in the {{java.require()}} function.
+The functions casts the passed value to the specified type and returns a typed object. The type can be specified as a type or as a type name. The semantics for type names are the same as in the `java.require()` function.
  
 The primary purpose of the function is to resolve ambivalence when invoking overloaded methods.
- 
-Example: 
-{code} 
+
+Example:
+{{{
 StringBuilder = java.require("java.lang.StringBuilder") 
 sb = StringBuilder:new() 
 sb:append(1) -- fails due to ambivalence 
 sb:append(java.cast(1, "int")) -- succeeds 
-{code} 
+}}}
 
-h1. java.proxy 
+=`java.proxy`=
 
 Syntax: 
-{code} 
+{{{
 proxy = java.proxy(table, interface|interfaceName {, interface|interfaceName}) 
-{code} 
+}}}
 
 The function creates a Java object that implements a list of interfaces. The provided table contains keys matching the method names of the interfaces and values providing the implementation methods as Lua functions.
- 
+
 Example: 
-{code} 
+{{{
 -- privilegedAction object 
 privilegedAction = { hasRun = false } 
 
@@ -121,258 +123,218 @@ AccessController:doPrivileged(proxy)
 
 -- Check post-condition 
 assert(privilegedAction.hasRun) 
-{code} 
+}}}
 
-h1. java.pairs 
+=`java.pairs`=
 
-Syntax: 
-{code} 
+Syntax:
+{{{
 func, map, initKey = java.pairs(map) 
-{code} 
+}}}
 
 The function provides an iterator for Java maps that can be used in the Lua _generic for_ construct.
- 
+
 Example: 
-{code} 
+{{{
 -- Create a Java map 
 map = java.new("java.util.HashMap") 
 for i = 1, 10 do 
-map:put(tostring(i) , i) 
+	map:put(tostring(i) , i) 
 end 
 
 -- Process the map with java.pairs() 
 indexes = nil 
 sum = 0 
 for k, v in java.pairs(map) do 
-if indexes then indexes = indexes .. " " .. k else indexes = k end 
-sum = sum + v 
+	if indexes then indexes = indexes .. " " .. k else indexes = k end 
+	sum = sum + v 
 end 
 print(string.format("The sum of indexes '%s' is %d", indexes, sum)) 
-{code} 
+}}}
 
-h1. java.ipairs 
+=`java.ipairs`=
 
-Syntax: 
-{code} 
+Syntax:
+{{{
 func, array, initKey = java.ipairs(array|list) 
-{code} 
+}}}
 
 The function provides an iterator for Java lists and arrays that can be used in the Lua _generic for_ construct. The iterator is 1-based.
- 
+
 Examples: 
-{code} 
+{{{
 -- Create a Java list 
 list = java.new("java.util.ArrayList") 
 for i = 1, 10 do 
-list:add(i) 
+	list:add(i) 
 end 
 
 -- Process the list with java.ipairs() 
 sum = 0 
 for i, v in java.ipairs(list) do 
-sum = sum + v 
+	sum = sum + v 
 end 
 print(string.format("The list now contains %d elements with a sum of %d.", list:size(), sum))
- {code} 
+}}}
 
-{code} 
+{{{
 -- Create a Java array 
 byteArray = java.new("byte", 10) 
 
 -- Process the array with java.ipairs() 
 count = 0 
 for i, v in java.ipairs(byteArray) do 
-byteArray[i] = i 
-count = count + 1 
+	byteArray[i] = i 
+	count = count + 1 
 end 
 print(string.format("Set %d values in the array of length %d.", count, #byteArray))
- {code} 
+}}}
 
-h1. java.totable 
+=`java.totable`=
 
 Syntax: 
-{code} 
+{{{
 table = java.totable(list|map) 
-{code} 
+}}}
 
-The function creates wrapper objects for lists or maps that makes these Java data types behave like Lua tables. The wrapper objects support access by indexing, thus allowing for cleaner Lua syntax. As in regular Lua tables, assigning nil to an index removes the element at that index. For lists, the wrapper objects also support the {{\#}} operator. The wrapper objects can be used wherever a Java {{List}} or {{Map}} is required, such as in the {{ipairs()}} function.
- 
-Examples: 
-{code} 
+The function creates wrapper objects for lists or maps that makes these Java data types behave like Lua tables. The wrapper objects support access by indexing, thus allowing for cleaner Lua syntax. As in regular Lua tables, assigning nil to an index removes the element at that index. For lists, the wrapper objects also support the `#` operator. The wrapper objects can be used wherever a Java `List` or `Map` is required, such as in the `ipairs()` function.
+
+Examples:
+{{{
 -- Create a Java list and wrap it 
 arrayList = java.new("java.util.ArrayList") 
 list = java.totable(arrayList) 
 for i = 1, 10 do 
-list[i] = i -- same as arrayList:add(i) 
+	list[i] = i -- same as arrayList:add(i) 
 end 
 
 -- Process the list with java.ipairs() 
 sum = 0 
 for i, v in java.ipairs(list) do 
-assert(list[i] == v) -- same as assert(arrayList:get(i) == v) 
-sum = sum + v 
+	assert(list[i] == v) -- same as assert(arrayList:get(i) == v) 
+	sum = sum + v 
 end 
-print(string.format("The list now contains %d elements with a sum of %d.", #list, sum))
- -- same as print(string.format("...", arrayList:size(), sum)) 
+print(string.format("The list now contains %d elements with a sum of %d.", #list, sum)) -- same as print(string.format("...", arrayList:size(), sum)) 
 
 -- Remove the first two elements from the list 
 list[0] = nil -- same as arrayList:remove(0) 
 list[0] = nil -- same as arrayList:remove(0) 
 print(string.format("The list now contains %d elements.", #list)) 
-{code} 
+}}}
 
-{code} 
+{{{
 -- Create a Java map and wrap it 
 hashMap = java.new("java.util.HashMap") 
 map = java.totable(hashMap) 
 for i = 1, 10 do 
-map[tostring(i)] = i -- same as hashMap:put(tostring(i) , i) 
+	map[tostring(i)] = i -- same as hashMap:put(tostring(i) , i) 
 end 
 
 -- Process the map with java.pairs() 
 indexes = nil 
 sum = 0 
 for k, v in java.pairs(map) do 
-assert(map[k] == v) -- same as assert(hashMap:get(k) == v) 
-if indexes then indexes = indexes .. " " .. k else indexes = k end 
-sum = sum + v 
+	assert(map[k] == v) -- same as assert(hashMap:get(k) == v) 
+	if indexes then indexes = indexes .. " " .. k else indexes = k end 
+	sum = sum + v 
 end 
 print(string.format("The sum of indexes '%s' is %d", indexes, sum)) 
-{code} 
+}}}
 
-h1. java.elements 
+=`java.elements`=
 
 Syntax: 
-{code} 
+{{{
 func, iterable, initKey = java.elements(iterable) 
-{code} 
+}}}
 
-The function provides an iterator for Java objects implementing the {{Iterable}} interface. The Iterable interface is implemented by Java classes supporting the Java _foreach_ construct. This includes Java collection types such as lists, maps and sets. The iterator returned by the function can be used in the Lua _generic for_ construct.
- 
+The function provides an iterator for Java objects implementing the `Iterable` interface. The Iterable interface is implemented by Java classes supporting the Java _foreach_ construct. This includes Java collection types such as lists, maps and sets. The iterator returned by the function can be used in the Lua _generic for_ construct.
+
 Example: 
-{code} 
+{{{
 -- Create a set and populate it 
 set = java.new("java.util.HashSet") 
 for i = 1, 10 do 
-set:add(i) 
+	set:add(i) 
 end 
 
 -- Process the set with java.elements() 
 sum = 0 
 for value in java.elements(set) do 
-sum = sum + value 
+	sum = sum + value 
 end 
 print(string.format("The sum of the values in the set is %d.", sum)) 
-{code} 
+}}}
 
-h1. java.fields 
+=`java.fields`=
 
 Syntax: 
-{code} 
+{{{
 func, class|object, initKey = java.fields(class|object) 
-{code} 
+}}}
 
 The function provides an iterator for Java classes and objects that can be used in the Lua _generic for_ construct. The iterator iterates over the static fields of a class or the non-static fields of an object.
- 
+
 Examples: 
-{code} 
+{{{
 -- Print static fields of the System class 
 System = java.require("java.lang.System") 
 for field, value in java.fields(System) do 
-print(field) 
+	print(field) 
 end 
-{code} 
+}}}
 
-{code} 
+{{{
 -- Count fields of an object 
 object = java.new("java.lang.Object") 
 count = 0 
 for field, value in java.fields(object) do 
-count = count + 1 
+	count = count + 1 
 end 
 print(string.format("Object has %d public fields.", count)) 
-{code} 
+}}}
 
-h1. java.methods 
+=`java.methods`=
 
 Syntax: 
-{code} 
+{{{
 func, class|object, initKey = java.methods(class|object) 
-{code} 
+}}}
 
 The function provides an iterator for Java classes and objects that can be used in the Lua _generic for_ construct. The iterator iterates over the static methods of a class or the non-static methods of an object.
- 
+
 Examples: 
-{code} 
+{{{
 -- Print static methods of the System class 
 System = java.require("java.lang.System") 
 for method, value in java.methods(System) do 
-print(method) 
+	print(method) 
 end 
 
 -- Count methods of an object 
 object = java.new("java.lang.Object") 
 count = 0 
 for field, value in java.methods(object) do 
-count = count + 1 
+	count = count + 1 
 end 
 print(string.format("Object has %d public methods.", count)) 
-{code} 
+}}}
 
-h1. java.properties 
+=`java.properties`=
 
 Syntax: 
-{code} 
+{{{
 func, object, initKey = java.properties(object) 
-{code} 
+}}}
 
 The function provides an iterator for Java objects that can be used in the Lua _generic for_ construct. The iterator iterates over the properties of an object.
- 
+
 Example: 
-{code} 
+{{{
 -- Print properties of a Thread object 
 Thread = java.require("java.lang.Thread") 
 thread = Thread:currentThread() 
 for property, value in java.properties(thread) do 
-print(property) 
+	print(property) 
 end 
-{code} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}}}
