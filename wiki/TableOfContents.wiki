@@ -2,8 +2,8 @@
 
   * [GettingStarted Getting Started]
   * [InterfacingWithJavaFromLua Interfacing with Java from Lua]
-  * [InterfacingWithLuaFromJava Interfacing with Lua from Java]
     * [JavaModule Java Module]
+  * [InterfacingWithLuaFromJava Interfacing with Lua from Java]
   * [JSR223Provider The JSR 223 Provider]
   * [JNLuaConsole The JNLua Console]
   * [BuildingTheNativeLibrary Building the Native Library]
