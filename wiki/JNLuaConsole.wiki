@@ -1,45 +1,7 @@
 #summary The JNLua Console
 
-JNLua includes a simple Lua console for experimenting with JNLua. The console is provided by the class {{LuaConsole}}.
- 
-The console collects input until a line with the sole content of the word *go* is encountered. At that point, the collected input is run as a Lua chunk. If the Lua chunk loads and runs successfully, the console displays the returned values of the chunk as well as the execution time based on a {{System.nanoTime()}} measurement. Otherwise, the console shows the error that has occurred.
- 
-{tip:title=Printing Expression}Expressions can be printed by prepending *=* to the expression at the beginning of a chunk. The console translates *=* into *return* followed by a space and executes the chunk immediately. No separate *go* is required. Therefore, expressions printed this way must be entered on a single line.{tip} 
+JNLua includes a simple Lua console for experimenting with JNLua. The console is provided by the class `LuaConsole`.
 
+The console collects input until a line with the sole content of the word *go* is encountered. At that point, the collected input is run as a Lua chunk. If the Lua chunk loads and runs successfully, the console displays the returned values of the chunk as well as the execution time based on a `System.nanoTime()` measurement. Otherwise, the console shows the error that has occurred.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Expressions can be printed by prepending *=* to the expression at the beginning of a chunk. The console translates *=* into *return* followed by a space and executes the chunk immediately. No separate *go* is required. Therefore, expressions printed this way must be entered on a single line.
