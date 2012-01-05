@@ -165,11 +165,14 @@ synchronized (luaState) {
 =Error Handling=
 
 JNLua uses the following exceptions: 
+
 || *Exception* || *Thrown* || 
-|| `LuaRuntimeException` || If a Lua runtime error occurs, such as indexing a `nil` value. ||
+|| `LuaRuntimeException` || If a Lua runtime error occurs. ||
 || `LuaSyntaxException` || If the syntax of a Lua chunk is incorrect. || 
 || `LuaMemoryAllocationException` || If the Lua memory allocator runs out of memory or if a JNI allocation fails. ||
- 
+|| `LuaGcMetamethodException` || If an error occurs running a `__gc` metamethod during garbage collection. ||
+|| `LuaMessageHandlerException` || If an error occurs running the message handler of a protected call. ||
+
 All exceptions are derived from `LuaException`. 
 
 Note that all Lua exceptions are _unchecked_ exceptions. It is recommended that clients use a try...catch clause to catch `LuaException` and its subclasses.
