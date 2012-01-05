@@ -41,7 +41,9 @@ The table below explains the mapping of Java elements to Lua elements as impleme
 || `toString()` || `__tostring` metamethod. This implies that the Lua `tostring()` function has the semantics of the Java `toString()` method. ||
 || `equals()` || `__eq` metamethod. This implies that the Lua `==` and `~=` operators have the semantics of the Java `equals()` method. ||
 || `Comparable` || `__le` and `__lt` metamethods. This implies that the Lua `<`, `<=`, `>=` and `>` operators have the the semantics of the Java `compareTo()` method. ||
-|| `[]` || Lua value behaving similar to a regular Lua table used as an array, except that the size is fixed. Indexing in Lua is 1-based. The Lua value is a proxy for the Java array. Therefore, changes on the Lua side go through to the Java array and vice versa. The `#` operator returns the length of the Java array. ||
+|| `[]` || Lua value behaving similar to a regular Lua table used as an array, except that the size is fixed. Indexing in Lua is 1-based. The Lua value is a proxy for the Java array. Therefore, changes on the Lua side go through to the Java array and vice versa. The `#` operator returns the length of the Java array. As of JNLua 1.0, the `__ipairs` metamethod provides an iterator over the indexes and values of the array. ||
+|| `List` || As of JNLua 1.0, the `__ipairs` metamethod provides an interator over the indexes and values of the list. ||
+|| `Map` || As of JNLua 1.0, the `__pairs` metamethod provides an iterator over the keys and values of the map. ||
 
 =The Java Module=
 
