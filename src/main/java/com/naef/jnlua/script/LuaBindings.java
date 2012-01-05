@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaBindings.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -59,7 +59,7 @@ class LuaBindings extends AbstractTableMap<String> implements Bindings {
 
 	@Override
 	public void pushValue() {
-		getLuaState().rawGet(LuaState.REGISTRYINDEX, LuaState.RIDX_GLOBALS);
+		getLuaState().pushValue(LuaState.GLOBALSINDEX);
 	}
 
 	// -- Package-private methods

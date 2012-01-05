@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: DefaultConverter.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -258,12 +258,6 @@ public class DefaultConverter implements Converter {
 	// -- Java converter methods
 	@Override
 	public int getTypeDistance(LuaState luaState, int index, Class<?> formalType) {
-		// Handle none
-		LuaType luaType = luaState.type(index);
-		if (luaType == null) {
-			return Integer.MAX_VALUE;
-		}
-		
 		// Handle void
 		if (formalType == Void.TYPE) {
 			return Integer.MAX_VALUE;
@@ -275,7 +269,7 @@ public class DefaultConverter implements Converter {
 		}
 
 		// Handle Lua types
-		switch (luaType) {
+		switch (luaState.type(index)) {
 		case NIL:
 			return 1;
 		case BOOLEAN:
@@ -349,12 +343,6 @@ public class DefaultConverter implements Converter {
 	@Override
 	public <T> T convertLuaValue(LuaState luaState, int index,
 			Class<T> formalType) {
-		// Handle none
-		LuaType luaType = luaState.type(index);
-		if (luaType == null) {
-			throw new IllegalArgumentException("undefined index: " + index);
-		}
-		
 		// Handle void
 		if (formalType == Void.TYPE) {
 			throw new ClassCastException(String.format(
@@ -368,7 +356,7 @@ public class DefaultConverter implements Converter {
 		}
 
 		// Handle Lua types
-		switch (luaType) {
+		switch (luaState.type(index)) {
 		case NIL:
 			return null;
 		case BOOLEAN:
@@ -434,7 +422,7 @@ public class DefaultConverter implements Converter {
 				};
 			}
 			if (formalType.isArray()) {
-				int length = luaState.rawLen(index);
+				int length = luaState.length(index);
 				Class<?> componentType = formalType.getComponentType();
 				Object array = Array.newInstance(formalType.getComponentType(),
 						length);

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: AbstractTableMap.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -234,7 +234,6 @@ public abstract class AbstractTableMap<K> extends AbstractMap<K, Object>
 			if (!(object instanceof AbstractTableMap<?>.Entry)) {
 				return false;
 			}
-			@SuppressWarnings("unchecked")
 			Entry luaTableEntry = (Entry) object;
 			if (luaTableEntry.getLuaState() != getLuaState()) {
 				return false;
@@ -247,7 +246,6 @@ public abstract class AbstractTableMap<K> extends AbstractMap<K, Object>
 			if (!(object instanceof AbstractTableMap<?>.Entry)) {
 				return false;
 			}
-			@SuppressWarnings("unchecked")
 			Entry luaTableEntry = (Entry) object;
 			if (luaTableEntry.getLuaState() != getLuaState()) {
 				return false;
@@ -363,7 +361,6 @@ public abstract class AbstractTableMap<K> extends AbstractMap<K, Object>
 			if (!(obj instanceof AbstractTableMap<?>.Entry)) {
 				return false;
 			}
-			@SuppressWarnings("unchecked")
 			Entry other = (Entry) obj;
 			return getLuaState() == other.getLuaState()
 					&& key.equals(other.key);

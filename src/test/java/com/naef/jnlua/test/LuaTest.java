@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaTests.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -41,7 +41,7 @@ public class LuaTest extends AbstractLuaTest {
 		// Load
 		InputStream inputStream = getClass().getClassLoader()
 				.getResourceAsStream(source);
-		luaState.load(inputStream, "=" + moduleName, "t");
+		luaState.load(inputStream, moduleName);
 		luaState.pushString(moduleName);
 		luaState.call(1, 0);
 

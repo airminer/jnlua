@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaScriptEngineTest.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -72,7 +72,7 @@ public class LuaScriptEngineTest {
 		assertEquals("JNLua", factory.getEngineName());
 
 		// getEngineVersion()
-		assertEquals("1.0", factory.getEngineVersion());
+		assertEquals("0.9", factory.getEngineVersion());
 
 		// getNames()
 		List<String> names = factory.getNames();
@@ -85,7 +85,7 @@ public class LuaScriptEngineTest {
 		assertEquals("Lua", factory.getLanguageName());
 
 		// getLanguageVersion()
-		assertEquals("5.2", factory.getLanguageVersion());
+		assertEquals("5.1", factory.getLanguageVersion());
 
 		// getExtensions()
 		List<String> extensions = factory.getExtensions();

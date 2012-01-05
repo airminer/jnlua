@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaConsole.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -163,7 +163,7 @@ public class LuaConsole {
 		try {
 			long start = System.nanoTime();
 			luaState.setTop(0);
-			luaState.load(in, "=console", "t");
+			luaState.load(in, "console");
 			luaState.call(0, LuaState.MULTRET);
 			long stop = System.nanoTime();
 			for (int i = 1; i <= luaState.getTop(); i++) {
