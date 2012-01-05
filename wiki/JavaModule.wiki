@@ -134,6 +134,8 @@ func, map, initKey = java.pairs(map)
 
 The function provides an iterator for Java maps that can be used in the Lua _generic for_ construct.
 
+As of JNLua 1.0, the function is also provided via the `__pairs` metamethod by the default Java reflector, and the standard `pairs` function can be used on maps.
+
 Example: 
 {{{
 -- Create a Java map 
@@ -160,6 +162,8 @@ func, array, initKey = java.ipairs(array|list)
 }}}
 
 The function provides an iterator for Java lists and arrays that can be used in the Lua _generic for_ construct. The iterator is 1-based.
+
+As of JNLua 1.0, the function is also provided via the `__ipairs` metamethod by the default Java reflector, and the standard `ipairs` function can be used on arrays and lists.
 
 Examples: 
 {{{
