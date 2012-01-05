@@ -2,16 +2,34 @@
 
 =Installing JNLua=
 
-JNLua can be [http://www.naef.com/jnlua/download downloaded] from its web site. The download directory contains three types of assemblies:
+JNLua can be [http://code.google.com/p/jnlua/downloads/list downloaded] from its web site. The download directory contains two types of assemblies:
  
   * `bin`: these contain the JNLua Java library as a JAR file 
-  * `native`: these contain pre-built versions of the JNLua native library 
   * `src`: these contain the JNLua source code 
 
-To get started, you will need at least a `bin` file and either a `native` or `src` file depending on whether you are using a pre-built JNLua native library or building the native library yourself.
+To get started, you will need both a `bin` file and a `src` file.
  
-==JNLua Native Library==
-The JNLua project currently provides pre-built native libraries for Windows and Linux platforms on both 32-bit and 64-archiectures. See [BuildingTheNativeLibrary Building The Native Library] for information on how to build the JNLua native library on other platforms.
+=Installing the Lua Library=
+
+The JNLua native library requires Lua as a shared library. Depending on your environment, you can install the shared Lua library via a package manager, download it from the [http://luaforge.net/projects/luabinaries/ LuaBinaries] project, or compile the [http://www.lua.org/download.html Lua source code] into a shared library yourself.
+ 
+==Lua Version==
+
+JNLua 0.9 requires Lua 5.1.
+
+JNLua 1.0 requires Lua 5.2.
+
+==Installation Directory==
+
+The Lua library must be placed in a location where is is found when the Java Virtual Machine loads the JNLua native library. Typical locations inlcude:
+ 
+  * *Win32*: `C:\Windows\System32`
+  * *Linux*: `/usr/lib` 
+  * *MacOSX*: `/usr/lib`
+
+=Installing the JNLua Native Library=
+
+The JNLua project no longer provides pre-built native libraries. Please see [BuildingTheNativeLibrary Building The Native Library] for information on how to build the JNLua native library.
  
 ==Installation Directory==
 
@@ -23,25 +41,9 @@ The JNLua native library must be placed in a location where is is found by the J
 
 See your JVM documentation for a list of these locations on your platform. As as alternative, you can ensure that the location where you have installed the JNLua native library is on your `java.library.path`. 
 
-=Installing the Lua Library=
-
-The JNLua native library requires Lua as a shared library. Depending on your environment, you can install the shared Lua library via a package manager, download it from the [http://luaforge.net/projects/luabinaries/ LuaBinaries] project, or compile the [http://www.lua.org/download.html Lua source code] into a shared library yourself.
- 
-==Lua Version==
-
-JNLua 0.9 requires Lua 5.1.{info} 
-
-==Installation Directory==
-
-The Lua library must be placed in a location where is is found when the Java Virtual Machine loads the JNLua native library. Typical locations inlcude:
- 
-  * *Win32*: `C:\Windows\System32`
-  * *Linux*: `/usr/lib` 
-  * *MacOSX*: `/usr/lib`
-
 =Launching the JNLua Console=
 
-To launch the JNLua console, type the following in the directory where `jnlua-\{version}.jar` is installed:
+To launch the JNLua console, type the following in the directory where `jnlua-{version}.jar` is installed:
  
 {{{
 java -classpath jnlua-{version}.jar com.naef.jnlua.console.LuaConsole 
