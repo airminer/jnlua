@@ -886,7 +886,7 @@ JNIEXPORT jint JNICALL Java_com_naef_jnlua_LuaState_lua_1type (JNIEnv *env, jobj
 	
 	luaState = getLuaThread(env, obj);
 	if (!validindex(luaState, index)) {
-		return 0;
+		return LUA_TNONE;
 	}
 	JNLUA_TRY
 		result = lua_type(luaState, index);

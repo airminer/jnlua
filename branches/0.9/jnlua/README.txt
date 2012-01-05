@@ -1,5 +1,23 @@
 HISTORY for JNLua
 
+* Release 0.9.2 (2012-01-05)
+
+- Made the behavior of library open methods more consistent. The openLib method
+of LuaState is now properly documented to leave the opened library on the
+stack; the openLibs method of LuaState now removes libraries that are pushed
+onto the stack; the open method of JavaModule now leaves the Java module on
+the stack.
+
+- Corrected an issue where the type method in LuaState would not return null for
+undefined stack indexes.
+
+- Corrected an issue where the default converter would not properly handle
+undefined stack indexes.
+
+- Corrected an issue where the setJavaReflector method in LuaState allowed a
+null value to be set.
+
+
 * Release 0.9.1 Beta (2010-04-05)
 
 - Added NativeSupport for more explicit control over the native library
