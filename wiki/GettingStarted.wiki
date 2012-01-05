@@ -11,7 +11,7 @@ To get started, you will need both a `bin` file and a `src` file.
  
 =Installing the Lua Library=
 
-The JNLua native library requires Lua as a shared library. Depending on your environment, you can install the shared Lua library via a package manager, download it from the [http://luaforge.net/projects/luabinaries/ LuaBinaries] project, or compile the [http://www.lua.org/download.html Lua source code] into a shared library yourself.
+The JNLua native library requires Lua as a shared library. Depending on your environment, you can install the shared Lua library via a package manager, download it from the [http://luabinaries.sourceforge.net/ LuaBinaries] project, or compile the [http://www.lua.org/download.html Lua source code] into a shared library yourself.
  
 ==Lua Version==
 
