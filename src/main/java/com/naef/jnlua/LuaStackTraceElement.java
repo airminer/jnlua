@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaStackTraceElement.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -52,7 +52,7 @@ public class LuaStackTraceElement {
 	 * the execution point, the method returns <code>null</code>.
 	 * 
 	 * @return the source name, or <code>null</code>
-	 * @see LuaState#load(java.io.InputStream, String, String)
+	 * @see LuaState#load(java.io.InputStream, String)
 	 * @see LuaState#load(String, String)
 	 */
 	public String getSourceName() {

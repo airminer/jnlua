@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: DefaultJavaReflector.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -80,20 +80,16 @@ public class DefaultJavaReflector implements JavaReflector {
 			return index;
 		case NEWINDEX:
 			return newIndex;
-		case LEN:
-			return length;
 		case EQ:
 			return equal;
+		case LEN:
+			return length;
 		case LT:
 			return lessThan;
 		case LE:
 			return lessThanOrEqual;
 		case TOSTRING:
 			return toString;
-		case PAIRS:
-			return JavaModule.getInstance().pairs;
-		case IPAIRS:
-			return JavaModule.getInstance().ipairs;
 		case JAVAFIELDS:
 			return javaFields;
 		case JAVAMETHODS:

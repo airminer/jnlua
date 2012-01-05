@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaScriptEngine.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -59,6 +59,10 @@ class LuaScriptEngine extends AbstractScriptEngine implements Compilable,
 		// Configuration
 		context.setBindings(createBindings(), ScriptContext.ENGINE_SCOPE);
 		luaState.openLibs();
+		luaState.load("io.stdout:setvbuf(\"no\")", "setvbuf");
+		luaState.call(0, 0);
+		luaState.load("io.stderr:setvbuf(\"no\")", "setvbuf");
+		luaState.call(0, 0);
 	}
 
 	// -- ScriptEngine methods
@@ -123,7 +127,7 @@ class LuaScriptEngine extends AbstractScriptEngine implements Compilable,
 	@Override
 	public <T> T getInterface(Class<T> clasz) {
 		synchronized (luaState) {
-			getLuaState().rawGet(LuaState.REGISTRYINDEX, LuaState.RIDX_GLOBALS);
+			luaState.pushValue(LuaState.GLOBALSINDEX);
 			try {
 				return luaState.getProxy(-1, clasz);
 			} finally {
@@ -225,16 +229,16 @@ class LuaScriptEngine extends AbstractScriptEngine implements Compilable,
 	 */
 	void loadChunk(Reader reader, ScriptContext scriptContext)
 			throws ScriptException {
-		loadChunk(new ReaderInputStream(reader), scriptContext, "t");
+		loadChunk(new ReaderInputStream(reader), scriptContext);
 	}
 
 	/**
 	 * Loads a chunk from an input stream.
 	 */
-	void loadChunk(InputStream inputStream, ScriptContext scriptContext,
-			String mode) throws ScriptException {
+	void loadChunk(InputStream inputStream, ScriptContext scriptContext)
+			throws ScriptException {
 		try {
-			luaState.load(inputStream, getChunkName(scriptContext), mode);
+			luaState.load(inputStream, getChunkName(scriptContext));
 		} catch (LuaException e) {
 			throw getScriptException(e);
 		} catch (IOException e) {
@@ -337,10 +341,10 @@ class LuaScriptEngine extends AbstractScriptEngine implements Compilable,
 		if (context != null) {
 			Object fileName = context.getAttribute(FILENAME);
 			if (fileName != null) {
-				return "@" + fileName.toString();
+				return fileName.toString();
 			}
 		}
-		return "=null";
+		return "null";
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: JavaModule.java,v 1.2 2008/11/07 21:00:52 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -33,14 +33,13 @@ public class JavaModule {
 		PRIMITIVE_TYPES.put("short", Short.TYPE);
 		PRIMITIVE_TYPES.put("void", Void.TYPE);
 	}
+	private static final NamedJavaFunction[] EMPTY_MODULE = new NamedJavaFunction[0];
 
 	// -- State
-	final NamedJavaFunction pairs = new Pairs();
-	final NamedJavaFunction ipairs = new IPairs();
 	private final NamedJavaFunction[] functions = { new Require(), new New(),
-			new InstanceOf(), new Cast(), new Proxy(), pairs, ipairs,
-			new ToTable(), new Elements(), new Fields(), new Methods(),
-			new Properties() };
+			new InstanceOf(), new Cast(), new Proxy(), new Pairs(),
+			new IPairs(), new ToTable(), new Elements(), new Fields(),
+			new Methods(), new Properties() };
 
 	// -- Static methods
 	/**
@@ -64,14 +63,16 @@ public class JavaModule {
 	 * Opens this module in a Lua state. The method is invoked by
 	 * {@link LuaState#openLibs()} or by
 	 * {@link LuaState#openLib(com.naef.jnlua.LuaState.Library)} if
-	 * {@link LuaState.Library#JAVA} is passed. The module is pushed onto the
-	 * stack.
+	 * {@link LuaState.Library#JAVA} is passed.
 	 * 
 	 * @param luaState
 	 *            the Lua state to open in
 	 */
 	public void open(LuaState luaState) {
-		luaState.register("java", functions, true);
+		synchronized (luaState) {
+			luaState.register("java", functions);
+			luaState.pop(1);
+		}
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class JavaModule {
 		public int invoke(LuaState luaState) {
 			// Check arguments
 			String className = luaState.checkString(1);
-			boolean doImport = luaState.toBoolean(2);
+			boolean doImport = luaState.checkBoolean(2, false);
 
 			// Load
 			Class<?> clazz = loadType(luaState, className);
@@ -138,25 +139,19 @@ public class JavaModule {
 
 			// Import
 			if (doImport) {
-				luaState.rawGet(LuaState.REGISTRYINDEX, LuaState.RIDX_GLOBALS);
-				String name = clazz.getName();
-				int index = name.indexOf('.');
-				while (index >= 0) {
-					String part = name.substring(0, index);
-					luaState.getField(-1, part);
-					if (!luaState.isTable(-1)) {
-						luaState.pop(1);
-						luaState.newTable();
-						luaState.pushValue(-1);
-						luaState.setField(-3, part);
-					}
-					luaState.remove(-2);
-					name = name.substring(index + 1);
-					index = name.indexOf('.');
+				className = clazz.getName();
+				int lastDotIndex = className.lastIndexOf('.');
+				if (lastDotIndex >= 0) {
+					String packageName = className.substring(0, lastDotIndex);
+					className = className.substring(lastDotIndex + 1);
+					luaState.register(packageName, EMPTY_MODULE);
+					luaState.pushJavaObject(clazz);
+					luaState.setField(-2, className);
+					luaState.pop(1);
+				} else {
+					luaState.pushJavaObject(clazz);
+					luaState.setGlobal(className);
 				}
-				luaState.pushValue(-2);
-				luaState.setField(-2, name);
-				luaState.pop(1);
 			}
 			luaState.pushBoolean(doImport);
 
@@ -352,12 +347,13 @@ public class JavaModule {
 		@Override
 		public int invoke(LuaState luaState) {
 			Map<Object, Object> map = luaState.checkJavaObject(1, Map.class);
-			luaState.checkArg(1, map != null,
-					String.format("expected map, got %s", luaState.typeName(1)));
+			luaState.checkArg(1, map != null, String.format(
+					"expected map, got %s", luaState.typeName(1)));
 			if (map instanceof NavigableMap) {
 				luaState.pushJavaFunction(navigableMapNext);
 			} else {
-				luaState.pushJavaFunction(new MapNext(map.entrySet().iterator()));
+				luaState
+						.pushJavaFunction(new MapNext(map.entrySet().iterator()));
 			}
 			luaState.pushJavaObject(map);
 			luaState.pushNil();
@@ -444,8 +440,8 @@ public class JavaModule {
 			} else {
 				object = luaState.checkJavaObject(1, Object.class);
 				luaState.checkArg(1, object.getClass().isArray(), String
-						.format("expected list or array, got %s",
-								luaState.typeName(1)));
+						.format("expected list or array, got %s", luaState
+								.typeName(1)));
 				luaState.pushJavaFunction(arrayNext);
 			}
 			luaState.pushJavaObject(object);
@@ -531,11 +527,8 @@ public class JavaModule {
 				List<Object> list = luaState.toJavaObject(1, List.class);
 				luaState.pushJavaObject(new LuaList(list));
 			} else {
-				luaState.checkArg(
-						1,
-						false,
-						String.format("expected map or list, got %s",
-								luaState.typeName(1)));
+				luaState.checkArg(1, false, String.format(
+						"expected map or list, got %s", luaState.typeName(1)));
 			}
 			return 1;
 		}
@@ -822,13 +815,10 @@ public class JavaModule {
 		// -- NamedJavaFunction methods
 		@Override
 		public int invoke(LuaState luaState) {
-			luaState.checkArg(
-					1,
-					luaState.isJavaObjectRaw(1),
-					String.format("expected Java object, got %s",
-							luaState.typeName(1)));
-			JavaFunction metamethod = luaState.getMetamethod(
-					luaState.toJavaObjectRaw(1), Metamethod.JAVAFIELDS);
+			luaState.checkArg(1, luaState.isJavaObjectRaw(1), String.format(
+					"expected Java object, got %s", luaState.typeName(1)));
+			JavaFunction metamethod = luaState.getMetamethod(luaState
+					.toJavaObjectRaw(1), Metamethod.JAVAFIELDS);
 			return metamethod.invoke(luaState);
 		}
 
@@ -845,13 +835,10 @@ public class JavaModule {
 		// -- NamedJavaFunction methods
 		@Override
 		public int invoke(LuaState luaState) {
-			luaState.checkArg(
-					1,
-					luaState.isJavaObjectRaw(1),
-					String.format("expected Java object, got %s",
-							luaState.typeName(1)));
-			JavaFunction metamethod = luaState.getMetamethod(
-					luaState.toJavaObjectRaw(1), Metamethod.JAVAMETHODS);
+			luaState.checkArg(1, luaState.isJavaObjectRaw(1), String.format(
+					"expected Java object, got %s", luaState.typeName(1)));
+			JavaFunction metamethod = luaState.getMetamethod(luaState
+					.toJavaObjectRaw(1), Metamethod.JAVAMETHODS);
 			return metamethod.invoke(luaState);
 		}
 
@@ -868,13 +855,10 @@ public class JavaModule {
 		// -- NamedJavaFunction methods
 		@Override
 		public int invoke(LuaState luaState) {
-			luaState.checkArg(
-					1,
-					luaState.isJavaObjectRaw(1),
-					String.format("expected Java object, got %s",
-							luaState.typeName(1)));
-			JavaFunction metamethod = luaState.getMetamethod(
-					luaState.toJavaObjectRaw(1), Metamethod.JAVAPROPERTIES);
+			luaState.checkArg(1, luaState.isJavaObjectRaw(1), String.format(
+					"expected Java object, got %s", luaState.typeName(1)));
+			JavaFunction metamethod = luaState.getMetamethod(luaState
+					.toJavaObjectRaw(1), Metamethod.JAVAPROPERTIES);
 			return metamethod.invoke(luaState);
 		}
 
