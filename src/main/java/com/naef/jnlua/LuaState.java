@@ -5,16 +5,6 @@
 
 package com.naef.jnlua;
 
-// Lua 5.2
-// bitlib
-// setfenv/getfenv -> deprecated
-// lua_equal, lua_lessthan -> deprecated, lua_compare new
-// remove GLOBALSINDEX
-// __pairs, __ipairs support as metamethods, see Java Reflector and Java Module
-// gc: new opcode
-// LUA_ERRGCMM
-// lua_yieldk, lua_pcallk
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -144,13 +134,11 @@ public class LuaState {
 	 * coroutine. This field is modified exclusively on the JNI side and must
 	 * not be touched on the Java side.
 	 */
-	@SuppressWarnings("unused")
 	private long luaThread;
 
 	/**
 	 * Ensures proper finalization of this Lua state.
 	 */
-	@SuppressWarnings("unused")
 	private Object finalizeGuardian;
 
 	/**
@@ -214,13 +202,13 @@ public class LuaState {
 			lua_pushjavafunction(new JavaFunction() {
 				@Override
 				public int invoke(LuaState luaState) {
-					JavaFunction javaFunction = getMetamethod(luaState
-							.toJavaObjectRaw(1), metamethod);
+					JavaFunction javaFunction = getMetamethod(
+							luaState.toJavaObjectRaw(1), metamethod);
 					if (javaFunction != null) {
 						return javaFunction.invoke(LuaState.this);
 					} else {
-						throw new UnsupportedOperationException(metamethod
-								.getMetamethodName());
+						throw new UnsupportedOperationException(
+								metamethod.getMetamethodName());
 					}
 				}
 			});
@@ -291,7 +279,7 @@ public class LuaState {
 	 *            the Java reflector
 	 */
 	public synchronized void setJavaReflector(JavaReflector javaReflector) {
-		if (converter == null) {
+		if (javaReflector == null) {
 			throw new NullPointerException();
 		}
 		this.javaReflector = javaReflector;
@@ -757,8 +745,7 @@ public class LuaState {
 	 * <p>
 	 * Note that the method does not perform conversion. If you want to check if
 	 * a value <i>is convertible to</i> a Java object, then invoke <code>
-	 * isJavaObject(index, Object.class)</code>
-	 * .
+	 * isJavaObject(index, Object.class)</code>.
 	 * </p>
 	 * 
 	 * <p>
@@ -1773,8 +1760,10 @@ public class LuaState {
 	public synchronized <T> T checkJavaObject(int index, Class<T> clazz) {
 		check();
 		if (!isJavaObject(index, clazz)) {
-			throw getArgException(index, String.format("exptected %s, got %s",
-					clazz.getCanonicalName(), typeName(index)));
+			throw getArgException(
+					index,
+					String.format("exptected %s, got %s",
+							clazz.getCanonicalName(), typeName(index)));
 		}
 		return toJavaObject(index, clazz);
 	}
@@ -1823,8 +1812,10 @@ public class LuaState {
 				return s;
 			}
 		}
-		throw getArgException(index, String.format(
-				"expected one of %s, got %s", Arrays.asList(options), s));
+		throw getArgException(
+				index,
+				String.format("expected one of %s, got %s",
+						Arrays.asList(options), s));
 	}
 
 	/**
@@ -2013,9 +2004,9 @@ public class LuaState {
 	 * Creates a Lua runtime exception to indicate an argument type error.
 	 */
 	private LuaRuntimeException getArgTypeException(int index, LuaType type) {
-		return getArgException(index, String
-				.format("expected %s, got %s", type.toString().toLowerCase(),
-						type(index).toString().toLowerCase()));
+		return getArgException(index,
+				String.format("expected %s, got %s", type.toString()
+						.toLowerCase(), type(index).toString().toLowerCase()));
 	}
 
 	/**
