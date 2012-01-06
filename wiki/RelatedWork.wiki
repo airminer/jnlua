@@ -5,3 +5,4 @@ You may also want to look at the following projects if you are interested in JNL
   * [http://www.cynicalmonkey.com/lua-engine/ Lua Scripting Engine for Java] 
   * [http://code.google.com/p/kahlua/ kahlua] - a Lua Virtual Machine for Java 
   * [http://luaj.sourceforge.net Luaj] - a light-weight, Java-centric Lua interpreter
+  * [https://github.com/dafrito/jna-lua jna-lua] - a JSR-223 compliant Lua language binding for Java based on JNA
