@@ -1,6 +1,6 @@
 #summary Java VM Module
 
-The Java VM module is a Lua module written in C that allows a Lua process to create a _Java Vitual Machine_ and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
+The Java VM module is a Lua module written in C that allows a Lua process to create a _Java Virtual Machine_ and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
 
 <wiki:toc max_depth="2" />
 
