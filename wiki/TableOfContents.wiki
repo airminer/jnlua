@@ -3,6 +3,7 @@
   * [GettingStarted Getting Started]
   * [InterfacingWithJavaFromLua Interfacing with Java from Lua]
     * [JavaModule Java Module]
+    * [JavaVMModule Java VM Module]
   * [InterfacingWithLuaFromJava Interfacing with Lua from Java]
   * [JSR223Provider The JSR 223 Provider]
   * [JNLuaConsole The JNLua Console]
