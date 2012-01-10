@@ -45,10 +45,6 @@ The table below explains the mapping of Java elements to Lua elements as impleme
 || `List` || As of JNLua 1.0, the `__ipairs` metamethod provides an interator over the indexes and values of the list. ||
 || `Map` || As of JNLua 1.0, the `__pairs` metamethod provides an iterator over the keys and values of the map. ||
 
-=The Java Module=
-
-For better structure, the documentation of the [JavaModule] is on a separate page.
- 
 =Type Conversion from Lua to Java=
 
 The following table describes the type mapping from Lua to Java, as implemented in the default converter. The type mapping is driven by the type of the Lua value to convert from and the formal Java type to convert to.
@@ -137,3 +133,11 @@ succeeded, error = pcall(function () java.require("undefined") end)
 assert(not succeeded) 
 print(tostring(error)) -- must invoke tostring() to extract message 
 }}}
+
+=The Java Module=
+
+The Java module provides a small set of Lua functions for interacting with Java. For better structure, the documentation of the [JavaModule Java module] is on a separate page.
+
+=The Java VM Module=
+
+The Java VM module is a Lua module written in C that allows a Lua process to create a Java Virtual Machine and run Java code in that machine. For better structure, the documentation of the [JavaVMModule Java VM module] is on a separate page.   
