@@ -1,6 +1,6 @@
 #summary Java Module
 
-The Java module provides a small set of Lua functions for interacting with Java.
+The JNLua Java module provides a small but comprehensive set of Lua functions providing Java language support for Lua.
 
 <wiki:toc max_depth="1" />
  
