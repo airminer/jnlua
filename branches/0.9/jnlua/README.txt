@@ -1,5 +1,14 @@
 HISTORY for JNLua
 
+* Relesae 0.9.3
+
+- Corrected an issue where the native library would not properly catch Lua
+errors, leading to uncontrolled transitions between Java code and native code.
+
+- Corrected an issue where the native library would exit incorrectly from the
+lua_tojavafunction function.
+
+
 * Release 0.9.2 (2012-01-05)
 
 - Made the behavior of library open methods more consistent. The openLib method
