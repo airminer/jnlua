@@ -67,7 +67,7 @@ Each conversion is assigned a _type distance_. That distance is an indication of
 || `function` (Java) || `JavaFunction` || 1 || 
 || `function` (Java) || `Object` (actual type `JavaFunction`) || 2 || 
 || `userdata` (Java object) || the class of the Java object or any superclass thereof || 1 ||
-|| userdata (Java object) || any interface implemented by the Java object or any superinterface thereof || 1 ||
+|| `userdata` (Java object) || any interface implemented by the Java object or any superinterface thereof || 1 ||
 || any || `Object` (actual type `LuaValueProxy`) || Integer.MAX_VALUE - 1 || 
 
 Addtional notes: 
