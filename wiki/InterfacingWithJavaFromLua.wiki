@@ -136,7 +136,7 @@ print(tostring(error)) -- must invoke tostring() to extract message
 
 =The Java Module=
 
-The Java module provides a small set of Lua functions for interacting with Java. For better structure, the documentation of the [JavaModule Java module] is on a separate page.
+The Java module provides a small but comprehensive set of Lua functions providing Java language support for Lua. For better structure, the documentation of the [JavaModule Java module] is on a separate page.
 
 =The Java VM Module=
 
