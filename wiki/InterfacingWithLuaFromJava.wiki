@@ -6,7 +6,7 @@ This section describes how to work with Lua from the Java point of view.
 
 =The Lua State=
 
-The `LuaState` is the core class of JNLua. Each object of this class represents a Lua instance. For those familiar with the Lua C API, a LuaState object in Java represents a `lua_State` pointer in C.
+The `LuaState` is the core class of JNLua. Each object of this class represents a Lua instance. For those familiar with the Lua C API, a !LuaState object in Java represents a `lua_State` pointer in C.
 
 The interface of the Lua state class corresponds largely to the underlying Lua C API which is documented in the [http://www.lua.org/manual/5.1 Lua Reference Manual]. Method names have been adjusted to Java camel case and the `lua_` and `luaL_` prefixes haven been omitted since this information is implied in the Java package name. Also, the Java API takes advantage of method overloading and uses a single method name for C API functions that primarily differ in their number arguments. For example, the Java API provides `rawGet(int)` and `rawGet(int, int)` whereas the C API provides `lua_rawget()` and `lua_rawgeti()`.
 
