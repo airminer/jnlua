@@ -1,6 +1,6 @@
 HISTORY for JNLua
 
-* Relesae 0.9.3
+* Relesae 0.9.3 (2012-01-12)
 
 - Corrected an issue where the native library would not properly catch Lua
 errors, leading to uncontrolled transitions between Java code and native code.
