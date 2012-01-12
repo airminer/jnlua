@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: LuaExceptionTest.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -12,18 +12,16 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.naef.jnlua.JavaFunction;
-import com.naef.jnlua.LuaGcMetamethodException;
 import com.naef.jnlua.LuaRuntimeException;
 import com.naef.jnlua.LuaStackTraceElement;
 import com.naef.jnlua.LuaState;
 import com.naef.jnlua.LuaSyntaxException;
-import com.naef.jnlua.LuaState.Library;
 
 /**
  * Contains unit tests for Lua exceptions.
  */
 public class LuaExceptionTest extends AbstractLuaTest {
-	// -- Test cases
+	// ---- Test cases
 	/**
 	 * Tests the call of a Lua function which invokes the Lua error function.
 	 */
@@ -45,7 +43,7 @@ public class LuaExceptionTest extends AbstractLuaTest {
 		sb.append("end\n");
 		sb.append("\n");
 		sb.append("A()\n");
-		luaState.load(sb.toString(), "=testLuaError");
+		luaState.load(sb.toString(), "test");
 
 		// Run
 		LuaRuntimeException luaRuntimeException = null;
@@ -60,33 +58,12 @@ public class LuaExceptionTest extends AbstractLuaTest {
 		assertEquals(5, luaStackTrace.length);
 		assertEquals(new LuaStackTraceElement("error", null, -1),
 				luaStackTrace[0]);
-		assertEquals(new LuaStackTraceElement("C", "testLuaError", 10),
+		assertEquals(new LuaStackTraceElement("C", "test", 10),
 				luaStackTrace[1]);
-		assertEquals(new LuaStackTraceElement("B", "testLuaError", 6), luaStackTrace[2]);
-		assertEquals(new LuaStackTraceElement("A", "testLuaError", 2), luaStackTrace[3]);
-		assertEquals(new LuaStackTraceElement(null, "testLuaError", 13),
+		assertEquals(new LuaStackTraceElement("B", "test", 6), luaStackTrace[2]);
+		assertEquals(new LuaStackTraceElement("A", "test", 2), luaStackTrace[3]);
+		assertEquals(new LuaStackTraceElement(null, "test", 13),
 				luaStackTrace[4]);
-	}
-
-	/**
-	 * Tests the call of a Java function which throws a Java runtime exception.
-	 */
-	@Test
-	public void testRuntimeException() throws Exception {
-		// Push function
-		luaState.pushJavaFunction(new RuntimeExceptionFunction());
-
-		// Push arguments
-		LuaRuntimeException luaRuntimeException = null;
-		try {
-			luaState.call(0, 0);
-		} catch (LuaRuntimeException e) {
-			luaRuntimeException = e;
-		}
-		assertNotNull(luaRuntimeException);
-		Throwable cause = luaRuntimeException.getCause();
-		assertNotNull(cause);
-		assertTrue(cause instanceof ArithmeticException);
 	}
 
 	/**
@@ -111,6 +88,27 @@ public class LuaExceptionTest extends AbstractLuaTest {
 	}
 
 	/**
+	 * Tests the call of a Java function which throws a Java runtime exception.
+	 */
+	@Test
+	public void testRuntimeException() throws Exception {
+		// Push function
+		luaState.pushJavaFunction(new RuntimeExceptionFunction());
+
+		// Push arguments
+		LuaRuntimeException luaRuntimeException = null;
+		try {
+			luaState.call(0, 0);
+		} catch (LuaRuntimeException e) {
+			luaRuntimeException = e;
+		}
+		assertNotNull(luaRuntimeException);
+		Throwable cause = luaRuntimeException.getCause();
+		assertNotNull(cause);
+		assertTrue(cause instanceof ArithmeticException);
+	}
+
+	/**
 	 * Tests the generation of a Lua syntax exception on Lua code with invalid
 	 * syntax.
 	 */
@@ -118,45 +116,14 @@ public class LuaExceptionTest extends AbstractLuaTest {
 	public void testLuaSyntaxException() throws Exception {
 		LuaSyntaxException luaSyntaxException = null;
 		try {
-			luaState.load("An invalid chunk of Lua.", "=testLuaSyntaxException");
+			luaState.load("An invalid chunk of Lua.", "invalid");
 		} catch (LuaSyntaxException e) {
 			luaSyntaxException = e;
 		}
 		assertNotNull(luaSyntaxException);
 	}
 
-	/**
-	 * Tests the generation of a Lua GC metamethod exception on a Lua value
-	 * raising an error in its <code>__gc</code> metamethod.
-	 */
-	@Test
-	public void testLuaGcMetamethodException() throws Exception {
-		LuaGcMetamethodException luaGcMetamethodException = null;
-		luaState.openLib(Library.BASE);
-		luaState.pop(1);
-		luaState.load(
-				"setmetatable({}, { __gc = function() error(\"gc\") end })\n"
-						+ "collectgarbage()", "=testLuaGcMetamethodException");
-		try {
-			luaState.call(0, 0);
-		} catch (LuaGcMetamethodException e) {
-			luaGcMetamethodException = e;
-		}
-		assertNotNull(luaGcMetamethodException);
-	}
-
 	// -- Private classes
-	/**
-	 * Provides a function throwing a Java runtime exception.
-	 */
-	private class RuntimeExceptionFunction implements JavaFunction {
-		public int invoke(LuaState luaState) throws LuaRuntimeException {
-			@SuppressWarnings("unused")
-			int a = 0 / 0;
-			return 0;
-		}
-	}
-	
 	/**
 	 * Provides a function throwing a Lua runtime exception with a cause.
 	 */
@@ -168,6 +135,17 @@ public class LuaExceptionTest extends AbstractLuaTest {
 			} catch (ArithmeticException e) {
 				throw new LuaRuntimeException(e.getMessage(), e);
 			}
+			return 0;
+		}
+	}
+
+	/**
+	 * Provides a function throwing a Java runtime exception.
+	 */
+	private class RuntimeExceptionFunction implements JavaFunction {
+		public int invoke(LuaState luaState) throws LuaRuntimeException {
+			@SuppressWarnings("unused")
+			int a = 0 / 0;
 			return 0;
 		}
 	}

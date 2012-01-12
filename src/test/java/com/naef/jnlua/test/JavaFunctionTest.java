@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: JavaFunctionTest.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -16,12 +16,12 @@ import com.naef.jnlua.LuaState;
  * Contains unit tests for Java functions.
  */
 public class JavaFunctionTest extends AbstractLuaTest {
-	// -- Test cases
+	// ---- Test cases
 	/**
 	 * Tests the call of a Lua function implemented in Java.
 	 */
 	@Test
-	public void testJavaFunction() throws Exception {
+	public void testLuaFunction() throws Exception {
 		// Push function
 		luaState.pushJavaFunction(new Add());
 

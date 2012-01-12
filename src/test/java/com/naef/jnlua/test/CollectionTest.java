@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: CollectionTest.java,v 1.1 2008/10/28 16:36:48 anaef Exp $
  * See LICENSE.txt for license terms.
  */
 
@@ -22,7 +22,7 @@ import org.junit.Test;
  * Contains unit tests for collections backed by Lua tables.
  */
 public class CollectionTest extends AbstractLuaTest {
-	// -- Test cases
+	// ---- Test cases
 	/**
 	 * Tests the map.
 	 */
@@ -149,7 +149,7 @@ public class CollectionTest extends AbstractLuaTest {
 		// remove()
 		list.remove(0);
 		assertEquals(1, list.size());
-		assertEquals(1, luaState.rawLen(-1));
+		assertEquals(1, luaState.length(-1));
 		luaState.rawGet(-1, 1);
 		assertEquals("test", luaState.toString(-1));
 		luaState.pop(1);
