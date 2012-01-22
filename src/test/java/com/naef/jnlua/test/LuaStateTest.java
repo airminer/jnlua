@@ -427,6 +427,8 @@ public class LuaStateTest extends AbstractLuaTest {
 				}
 			}
 		}
+		assertFalse(luaState.equal(20, 21));
+		
 
 		// lessThan()
 		for (int i = 0; i < 3; i++) {
@@ -435,6 +437,7 @@ public class LuaStateTest extends AbstractLuaTest {
 						luaState.lessThan(i - 3, j - 3));
 			}
 		}
+		assertFalse(luaState.lessThan(20, 21));
 
 		// length()
 		assertEquals(0, luaState.length(1));
