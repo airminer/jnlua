@@ -119,9 +119,15 @@ public class LuaState {
 	/**
 	 * The API version.
 	 */
-	private static final int APIVERSION = 1;
+	private static final int APIVERSION = 2;
 
 	// -- State
+	/**
+	 * Whether the <code>lua_State</code> on the JNI side is owned by the Java
+	 * state and must be closed when the Java state closes.
+	 */
+	private boolean ownState;
+
 	/**
 	 * The <code>lua_State</code> pointer on the JNI side. <code>0</code>
 	 * implies that this Lua state is closed. The field is modified exclusively
@@ -180,9 +186,15 @@ public class LuaState {
 	 * @see #setConverter(Converter)
 	 */
 	public LuaState() {
-		synchronized (getClass()) {
-			lua_newstate(APIVERSION);
-		}
+		this(0L);
+	}
+	
+	/**
+	 * Creates a new instance.
+	 */
+	private LuaState(long luaState) {
+		ownState = luaState == 0L;
+		lua_newstate(APIVERSION, luaState);
 		check();
 
 		// Create a finalize guardian
@@ -1976,7 +1988,7 @@ public class LuaState {
 	 */
 	private void closeInternal() {
 		if (isOpenInternal()) {
-			lua_close();
+			lua_close(ownState);
 			if (isOpenInternal()) {
 				throw new IllegalStateException("cannot close");
 			}
@@ -2034,9 +2046,9 @@ public class LuaState {
 	// -- Native methods
 	private static native String lua_version();
 
-	private native void lua_newstate(int apiversion);
+	private native void lua_newstate(int apiversion, long luaState);
 
-	private native void lua_close();
+	private native void lua_close(boolean ownState);
 
 	private native int lua_gc(int what, int data);
 
@@ -2177,13 +2189,13 @@ public class LuaState {
 
 	private native void lua_unref(int index, int ref);
 
-	private native int lua_tablesize(int index);
-
-	private native void lua_tablemove(int index, int from, int to, int count);
-
 	private native String lua_funcname();
 
 	private native int lua_narg(int narg);
+
+	private native int lua_tablesize(int index);
+
+	private native void lua_tablemove(int index, int from, int to, int count);
 
 	// -- Enumerated types
 	/**

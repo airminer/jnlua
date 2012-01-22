@@ -1,4 +1,12 @@
-HISTORY for JNLua
+README for JNLua
+
+For information about JNLua, please visit http://code.google.com/p/jnlua/.
+
+
+* Release 0.9.4
+
+- Refactored the error handling in the JNLua native library.
+
 
 * Relesae 0.9.3 (2012-01-12)
 

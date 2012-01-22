@@ -206,6 +206,17 @@ public class LuaStateErrorTest extends AbstractLuaTest {
 	}
 
 	/**
+	 * Call(int, int) with an extremely high number of returns.
+	 */
+	@Test(expected = IllegalStateException.class)
+	public void testOverflowCall() {
+		luaState.openLibs();
+		luaState.getGlobal("print");
+		luaState.pushString("");
+		luaState.call(1, EXTREMELY_HIGH);
+	}
+
+	/**
 	 * Call(int, int) with an illegal number of arguments.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -213,17 +224,6 @@ public class LuaStateErrorTest extends AbstractLuaTest {
 		luaState.openLibs();
 		luaState.getGlobal("print");
 		luaState.call(-1, 1);
-	}
-
-	/**
-	 * Call(int, int) with an extremely high number of returns.
-	 */
-	@Test(expected = LuaRuntimeException.class)
-	public void testOverflowCall() {
-		luaState.openLibs();
-		luaState.getGlobal("print");
-		luaState.pushString("");
-		luaState.call(1, EXTREMELY_HIGH);
 	}
 
 	/**
@@ -298,19 +298,11 @@ public class LuaStateErrorTest extends AbstractLuaTest {
 	/**
 	 * pushNumber(Double) until stack overflow.
 	 */
-	@Test(expected = LuaRuntimeException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testStackOverflow() {
 		for (int i = 0; i < EXTREMELY_HIGH; i++) {
 			luaState.pushNumber(0.0);
 		}
-	}
-
-	/**
-	 * equal(int, int) with illegal indexes.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalEqual() {
-		luaState.equal(getIllegalIndex(), getIllegalIndex());
 	}
 
 	/**
