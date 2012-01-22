@@ -5,6 +5,8 @@ For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 * Release 0.9.4
 
+- Added a javavm module, allowing to create a Java VM from Lua.
+
 - Added a 'new' method to interfaces in the default Java reflector. The method
 accepts a table providing the methods of the interface and returns a proxy
 that implements the interface.
