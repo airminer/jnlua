@@ -1351,6 +1351,7 @@ public class DefaultJavaReflector implements JavaReflector {
 			return parameterTypes;
 		}
 
+		@Override
 		public Class<?> getParameterType(int index) {
 			if (constructor.isVarArgs() && index >= parameterTypes.length - 1) {
 				return parameterTypes[parameterTypes.length - 1]
@@ -1435,6 +1436,7 @@ public class DefaultJavaReflector implements JavaReflector {
 			return PARAMETER_TYPES;
 		}
 
+		@Override
 		public Class<?> getParameterType(int index) {
 			return PARAMETER_TYPES[0];
 		}
