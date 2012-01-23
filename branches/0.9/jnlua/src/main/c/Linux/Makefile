@@ -3,6 +3,7 @@ JDK_DIR=/opt/jdk/jdk1.6.0_18
 LUA_LIB_DIR=/usr/lib
 LUA_INC_DIR=/usr/include/lua5.1
 VERSION=5.1
+ARCH=amd64
 
 # Tools
 CC=gcc
@@ -22,7 +23,7 @@ jnlua.o: ../jnlua.c
 	$(CC) $(CFLAGS) -I$(JDK_DIR)/include -I$(JDK_DIR)/include/linux -I$(LUA_INC_DIR) ../jnlua.c
 
 javavm.so: javavm.o
-	$(LD) $(LDFLAGS) -Wl,-soname=javavm.so -ojavavm.so -L$(LUA_LIB_DIR) -L$(JDK_DIR)/jre/lib/amd64/server -llua$(VERSION) -ljvm javavm.o
+	$(LD) $(LDFLAGS) -Wl,-soname=javavm.so -ojavavm.so -L$(LUA_LIB_DIR) -L$(JDK_DIR)/jre/lib/$(ARCH)/server -llua$(VERSION) -ljvm javavm.o
 
 javavm.o: ../javavm.c ../javavm.h
 	$(CC) $(CFLAGS) -I$(JDK_DIR)/include -I$(JDK_DIR)/include/linux -I$(LUA_INC_DIR) ../javavm.c
