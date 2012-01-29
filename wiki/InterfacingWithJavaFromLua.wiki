@@ -36,8 +36,8 @@ assert(today < tomorrow) -- invokes Comparable.compareTo()
 The table below explains the mapping of Java elements to Lua elements as implemented by the default Java reflector:
  
 || *From Java Element* || *To Lua Element* ||
-|| `Class` || Table-like value with keys for static fields and methods of the Java type. Constructors are mapped to a fixed key `new`. ||
-|| `Object` || Table-like value with keys for fields, methods and properties of the Java class. ||
+|| `Class` || Table-like value with keys for static fields and methods of the Java type. Constructors are mapped to a fixed key `new`. For interface types, the `new` method accepts a single table argument and returns a proxy implementing the interface with the Lua functions provided in the table. ||
+|| `Object` || Table-like value with keys for fields, methods and properties of the Java object. ||
 || `toString()` || `__tostring` metamethod. This implies that the Lua `tostring()` function has the semantics of the Java `toString()` method. ||
 || `equals()` || `__eq` metamethod. This implies that the Lua `==` and `~=` operators have the semantics of the Java `equals()` method. ||
 || `Comparable` || `__le` and `__lt` metamethods. This implies that the Lua `<`, `<=`, `>=` and `>` operators have the the semantics of the Java `compareTo()` method. ||
