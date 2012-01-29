@@ -3,7 +3,7 @@ README for JNLua
 For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 
-* Release 0.9.4
+* Release 0.9.4 (2012-01-29)
 
 - Added a javavm module, allowing to create a Java VM from Lua.
 
