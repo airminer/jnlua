@@ -2,7 +2,7 @@
 
 JNLua uses a native library which integrates Lua with Java by means of the Java Native API (JNI). The native library is written in ANSI C and invokes the actual Lua implementation provided by a shared Lua library.
 
-The optional JNLua Java VM module is built alongside the native library. It is a Lua module written in C that allows a Lua process to create a Java Virtual Machine and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
+The optional Java VM module is built alongside the native library. It is a Lua module written in C that allows a Lua process to create a Java Virtual Machine and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
 
 The sources of the native library and the Java VM module are part of the `src` assembly that is downloadable from the JNLua web site. As an alternative, the sources can be checked out from the project respository. The assembly or checkout contains the following directories that are relevant for building the native library and Java VM module:
 
