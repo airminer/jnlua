@@ -8,10 +8,10 @@ The Java VM module is a Lua module written in C that allows a Lua process to cre
 
 In order to use the Java VM module, the following prerequsites must be met:
 
-  * The Java VM module is called `javavm` and is built alongside the JNLua native library. The `javavm` module must be on the Lua C path, i.e. `package.cpath`.
+  * The Java VM module is called `javavm`. The module must be on the Lua C path, i.e. `package.cpath`. Pre-built versions for the Win32 platform (64-bit and 32-bit) are prorived in the `native` assembly. Please see [BuildingTheNativeLibrary Building the Native Library] for information on how to build the Java VM module yourself. 
   * The Java virtual machine library and its dependent libraries must be on the system library path. The exact steps required to ensure this depend on the platform and the Java virtual machine, for example:
     * Win32: Add `{JDK}\jre\bin` and `{JDK}\jre\bin\server` to `PATH`.
-    * Linux: Add `{JDK}/jre/lib/amd64` and `{JDKL}/jre/lib/amd64/server` to `LD_LIBRARY_PATH`.
+    * Linux: Add `{JDK}/jre/lib/{ARCH}` and `{JDK}/jre/lib/{ARCH}/server` to `LD_LIBRARY_PATH`.
   * The JNLua Java library, i.e. `jnlua-{version}.jar`, must be installed.
 
 =Example=
@@ -20,7 +20,7 @@ The following Lua code provides an example of using the Java VM module:
 
 {{{
 javavm = require("javavm")
-javavm.create("-Djava.class.path=jnlua-1.0.0.jar")
+javavm.create("-Djava.class.path=jnlua-1.0.2.jar")
 System = java.require("java.lang.System")
 System.out:println("Hello, world!")
 javavm.destroy()
