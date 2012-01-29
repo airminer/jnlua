@@ -1,6 +1,6 @@
 #summary Java VM Module
 
-The Java VM module is a Lua module written in C that allows a Lua process to create a _Java Virtual Machine_ and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
+The JNLua Java VM module is a Lua module written in C that allows a Lua process to create a _Java Virtual Machine_ and run Java code in that machine. In essence, the Java VM module supports bootstrapping JNLua from the Lua side.
 
 <wiki:toc max_depth="2" />
 
@@ -8,7 +8,7 @@ The Java VM module is a Lua module written in C that allows a Lua process to cre
 
 In order to use the Java VM module, the following prerequsites must be met:
 
-  * The Java VM module is called `javavm`. The module must be on the Lua C path, i.e. `package.cpath`. Pre-built versions for the Win32 platform (64-bit and 32-bit) are prorived in the `native` assembly. Please see [BuildingTheNativeLibrary Building the Native Library] for information on how to build the Java VM module yourself. 
+  * The JNLua Java VM module is called `javavm`. The module must be on the Lua C path, i.e. `package.cpath`. Pre-built versions for the Win32 platform (64-bit and 32-bit) are prorived in the `native` assembly. Please see [BuildingTheNativeLibrary Building the Native Library] for information on how to build the Java VM module yourself. 
   * The Java virtual machine library and its dependent libraries must be on the system library path. The exact steps required to ensure this depend on the platform and the Java virtual machine, for example:
     * Win32: Add `{JDK}\jre\bin` and `{JDK}\jre\bin\server` to `PATH`.
     * Linux: Add `{JDK}/jre/lib/{ARCH}` and `{JDK}/jre/lib/{ARCH}/server` to `LD_LIBRARY_PATH`.
