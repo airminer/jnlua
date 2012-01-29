@@ -25,7 +25,7 @@ public class Simple {
 		LuaState luaState = new LuaState(); 
 		try { 
 			// Define a function 
-			luaState.load("function add(a, b) return a + b end", "simple"); 
+			luaState.load("function add(a, b) return a + b end", "=simple"); 
 
 			// Evaluate the chunk, thus defining the function 
 			luaState.call(0, 0); // No arguments, no returns 
@@ -124,7 +124,7 @@ public class InterfaceProxy {
 			luaState.openLibs(); 
 
 			// Implement interface in Lua 
-			luaState.load("runnable = { run = function() print(\"I am running\") end }", "interface"); 
+			luaState.load("runnable = { run = function() print(\"I am running\") end }", "=interface"); 
 			luaState.call(0, 0); 
 
 			// Get proxy 
