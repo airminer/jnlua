@@ -22,7 +22,7 @@ import org.junit.Test;
  * Contains unit tests for collections backed by Lua tables.
  */
 public class CollectionTest extends AbstractLuaTest {
-	// -- Test cases
+	// ---- Test cases
 	/**
 	 * Tests the map.
 	 */
@@ -149,7 +149,7 @@ public class CollectionTest extends AbstractLuaTest {
 		// remove()
 		list.remove(0);
 		assertEquals(1, list.size());
-		assertEquals(1, luaState.rawLen(-1));
+		assertEquals(1, luaState.length(-1));
 		luaState.rawGet(-1, 1);
 		assertEquals("test", luaState.toString(-1));
 		luaState.pop(1);

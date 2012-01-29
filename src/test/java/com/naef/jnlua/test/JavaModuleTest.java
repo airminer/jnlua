@@ -21,16 +21,13 @@ import com.naef.jnlua.JavaModule;
  */
 public class JavaModuleTest extends AbstractLuaTest {
 	// ---- Test cases
-	/**
-	 * Tests the toTable method.
-	 */
 	@Test
 	public void testToTable() {
 		// Map
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		luaState.pushJavaObject(JavaModule.getInstance().toTable(map));
 		luaState.setGlobal("map");
-		luaState.load("map.x = 1", "=testToTable");
+		luaState.load("map.x = 1", "testToTable");
 		luaState.call(0, 0);
 		assertEquals(Double.valueOf(1.0), map.get("x"));
 
@@ -38,16 +35,8 @@ public class JavaModuleTest extends AbstractLuaTest {
 		List<Object> list = new ArrayList<Object>();
 		luaState.pushJavaObject(JavaModule.getInstance().toTable(list));
 		luaState.setGlobal("list");
-		luaState.load("list[1] = 1", "=testToList");
+		luaState.load("list[1] = 1", "testToList");
 		luaState.call(0, 0);
 		assertEquals(Double.valueOf(1.0), list.get(0));
-	}
-	
-	/**
-	 * Tests the Java module from Lua.
-	 */
-	@Test
-	public void testJavaModule() throws Exception {
-		runTest("com/naef/jnlua/test/JavaModule.lua", "JavaModule");
 	}
 }
