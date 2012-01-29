@@ -201,7 +201,7 @@ Syntax:
 table = java.totable(list|map) 
 }}}
 
-The function creates wrapper objects for lists or maps that makes these Java data types behave like Lua tables. The wrapper objects support access by indexing, thus allowing for cleaner Lua syntax. As in regular Lua tables, assigning nil to an index removes the element at that index. For lists, the wrapper objects also support the `#` operator. The wrapper objects can be used wherever a Java `List` or `Map` is required, such as in the `ipairs()` function.
+The function creates wrapper objects for lists or maps that make these Java data types behave like Lua tables. The wrapper objects support access by indexing, thus allowing for cleaner Lua syntax. As in regular Lua tables, assigning nil to an index removes the element at that index. For lists, the wrapper objects also support the `#` operator. The wrapper objects can be used wherever a Java `List` or `Map` is required, such as in the `ipairs()` function.
 
 Examples:
 {{{
@@ -221,8 +221,8 @@ end
 print(string.format("The list now contains %d elements with a sum of %d.", #list, sum)) -- same as print(string.format("...", arrayList:size(), sum)) 
 
 -- Remove the first two elements from the list 
-list[0] = nil -- same as arrayList:remove(0) 
-list[0] = nil -- same as arrayList:remove(0) 
+list[1] = nil -- same as arrayList:remove(0) 
+list[1] = nil -- same as arrayList:remove(0) 
 print(string.format("The list now contains %d elements.", #list)) 
 }}}
 
