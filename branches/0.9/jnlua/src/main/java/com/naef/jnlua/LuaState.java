@@ -1001,10 +1001,9 @@ public class LuaState {
 
 	/**
 	 * Returns the byte array representation of the value at the specified stack
-	 * index. Returns the byte array representation of the value at the
-	 * specified stack index. The value must be a string or a number. If the
-	 * value is a number, it is in place converted to a string. Otherwise, the
-	 * method returns <code>null</code>.
+	 * index. The value must be a string or a number. If the value is a number,
+	 * it is in place converted to a string. Otherwise, the method returns
+	 * <code>null</code>.
 	 * 
 	 * @param index
 	 *            the stack index
@@ -1729,7 +1728,7 @@ public class LuaState {
 	 *            the default value
 	 * @return the string value, or the default value
 	 */
-	public synchronized byte[] checkString(int index, byte[] d) {
+	public synchronized byte[] checkByteArray(int index, byte[] d) {
 		check();
 		if (isNoneOrNil(index)) {
 			return d;

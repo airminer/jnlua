@@ -41,10 +41,10 @@ function testTypes ()
 	-- Test
 	testObject.booleanField = true
 	assert(testObject.booleanField)
-	testObject.byteArrayField = "test"
-	assert(testObject.byteArrayField == "test")
 	testObject.byteField = 1
 	assert(testObject.byteField == 1)
+	testObject.byteArrayField = "test"
+	assert(testObject.byteArrayField == "test")
 	testObject.shortField = 1
 	assert(testObject.shortField == 1)
 	testObject.intField = 1
