@@ -101,8 +101,8 @@ public class LuaStateTest extends AbstractLuaTest {
 	 */
 	@Test
 	public void testLoadAndDump() throws Exception {
-		InputStream inputStream = new ByteArrayInputStream("a = {}"
-				.getBytes("UTF-8"));
+		InputStream inputStream = new ByteArrayInputStream(
+				"a = {}".getBytes("UTF-8"));
 		// load(InputStream)
 		luaState.load(inputStream, "test1");
 		luaState.call(0, 0);
@@ -180,6 +180,11 @@ public class LuaStateTest extends AbstractLuaTest {
 		assertEquals(LuaType.BOOLEAN, luaState.type(1));
 		luaState.pop(1);
 
+		// pushByteArray()
+		luaState.pushByteArray(new byte[10]);
+		assertEquals(LuaType.STRING, luaState.type(1));
+		luaState.pop(1);
+
 		// pushInteger()
 		luaState.pushInteger(1);
 		assertEquals(LuaType.NUMBER, luaState.type(1));
@@ -205,8 +210,8 @@ public class LuaStateTest extends AbstractLuaTest {
 
 		luaState.pushJavaObject(Double.valueOf(1.0));
 		assertEquals(LuaType.NUMBER, luaState.type(1));
-		assertEquals(Double.valueOf(1.0), luaState
-				.toJavaObject(1, Double.class));
+		assertEquals(Double.valueOf(1.0),
+				luaState.toJavaObject(1, Double.class));
 		luaState.pop(1);
 
 		luaState.pushJavaObject("test");
@@ -419,22 +424,20 @@ public class LuaStateTest extends AbstractLuaTest {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				if (i == j) {
-					assertTrue(String.format("%d, %d", i, j), luaState.equal(i,
-							j));
+					assertTrue(String.format("%d, %d", i, j),
+							luaState.equal(i, j));
 				} else {
-					assertFalse(String.format("%d, %d", i, j), luaState.equal(
-							i, j));
+					assertFalse(String.format("%d, %d", i, j),
+							luaState.equal(i, j));
 				}
 			}
 		}
 		assertFalse(luaState.equal(20, 21));
-		
 
 		// lessThan()
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				assertEquals(i < j,
-						luaState.lessThan(i - 3, j - 3));
+				assertEquals(i < j, luaState.lessThan(i - 3, j - 3));
 			}
 		}
 		assertFalse(luaState.lessThan(20, 21));
@@ -455,11 +458,11 @@ public class LuaStateTest extends AbstractLuaTest {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				if (i == j) {
-					assertTrue(String.format("%d, %d", i, j), luaState
-							.rawEqual(i, j));
+					assertTrue(String.format("%d, %d", i, j),
+							luaState.rawEqual(i, j));
 				} else {
-					assertFalse(String.format("%d, %d", i, j), luaState
-							.rawEqual(i, j));
+					assertFalse(String.format("%d, %d", i, j),
+							luaState.rawEqual(i, j));
 				}
 			}
 		}
@@ -475,6 +478,19 @@ public class LuaStateTest extends AbstractLuaTest {
 		assertTrue(luaState.toBoolean(8));
 		assertTrue(luaState.toBoolean(9));
 		assertTrue(luaState.toBoolean(10));
+
+		// toByteArray()
+		assertNull(luaState.toByteArray(1));
+		assertNull(luaState.toByteArray(2));
+		assertArrayEquals(new byte[] { '1' }, luaState.toByteArray(3));
+		assertArrayEquals(new byte[] { 't', 'e', 's', 't' },
+				luaState.toByteArray(4));
+		assertArrayEquals(new byte[] { '1' }, luaState.toByteArray(5));
+		assertNull(luaState.toString(6));
+		assertNull(luaState.toString(7));
+		assertNull(luaState.toString(8));
+		assertNull(luaState.toString(9));
+		assertNull(luaState.toString(10));
 
 		// toInteger()
 		assertEquals(0, luaState.toInteger(1));
@@ -495,7 +511,7 @@ public class LuaStateTest extends AbstractLuaTest {
 		assertNull(luaState.toJavaFunction(4));
 		assertNull(luaState.toJavaFunction(5));
 		assertNull(luaState.toJavaFunction(6));
-		//assertSame(javaFunction, luaState.toJavaFunction(7));
+		// assertSame(javaFunction, luaState.toJavaFunction(7));
 		assertNull(luaState.toJavaFunction(8));
 		assertNull(luaState.toJavaFunction(9));
 		assertNull(luaState.toJavaFunction(10));
@@ -508,21 +524,22 @@ public class LuaStateTest extends AbstractLuaTest {
 		assertNull(luaState.toJavaObjectRaw(5));
 		assertNull(luaState.toJavaObjectRaw(6));
 		assertNull(luaState.toJavaObjectRaw(7));
-		//assertSame(object, luaState.toJavaObjectRaw(8));
+		// assertSame(object, luaState.toJavaObjectRaw(8));
 		assertNull(luaState.toJavaObjectRaw(9));
 		assertNull(luaState.toJavaObjectRaw(10));
 
 		// toJavaObject(int, Class)
 		assertNull(luaState.toJavaObject(1, Object.class));
 		assertEquals(Boolean.FALSE, luaState.toJavaObject(2, Boolean.class));
-		assertEquals(Double.valueOf(1.0), luaState
-				.toJavaObject(3, Double.class));
+		assertEquals(Double.valueOf(1.0),
+				luaState.toJavaObject(3, Double.class));
 		assertEquals("test", luaState.toJavaObject(4, String.class));
 		assertEquals("1", luaState.toJavaObject(5, String.class));
-		assertArrayEquals(new Double[] { 1.0 }, luaState.toJavaObject(6,
-				Double[].class));
-		//assertSame(javaFunction, luaState.toJavaObject(7, JavaFunction.class));
-		//assertSame(object, luaState.toJavaObject(8, Object.class));
+		assertArrayEquals(new Double[] { 1.0 },
+				luaState.toJavaObject(6, Double[].class));
+		// assertSame(javaFunction, luaState.toJavaObject(7,
+		// JavaFunction.class));
+		// assertSame(object, luaState.toJavaObject(8, Object.class));
 		assertTrue(luaState.toJavaObject(9, Object.class) instanceof LuaValueProxy);
 		assertTrue(luaState.toJavaObject(10, Object.class) instanceof LuaValueProxy);
 
@@ -819,8 +836,8 @@ public class LuaStateTest extends AbstractLuaTest {
 		assertEquals(1.0, luaState.checkNumber(1, 1.0), 0.0);
 		assertEquals("test", luaState.checkString(4));
 		assertEquals("test", luaState.checkString(1, "test"));
-		assertEquals("test", luaState.checkOption(4, new String[] { "a", "b",
-				"test" }));
+		assertEquals("test",
+				luaState.checkOption(4, new String[] { "a", "b", "test" }));
 		assertEquals("test", luaState.checkOption(1, new String[] { "a", "b",
 				"test" }, "test"));
 		luaState.checkType(3, LuaType.NUMBER);
@@ -866,8 +883,7 @@ public class LuaStateTest extends AbstractLuaTest {
 		luaState.pop(1);
 
 		// Implement the runnable interface in Lua
-		luaState
-				.load("return { run = function () hasRun = true end }", "proxy");
+		luaState.load("return { run = function () hasRun = true end }", "proxy");
 		luaState.call(0, 1);
 
 		// Get the proxy

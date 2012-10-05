@@ -188,7 +188,7 @@ public class LuaState {
 	public LuaState() {
 		this(0L);
 	}
-	
+
 	/**
 	 * Creates a new instance.
 	 */
@@ -595,6 +595,17 @@ public class LuaState {
 	}
 
 	/**
+	 * Pushes a byte array value as a string value on the stack.
+	 * 
+	 * @param b
+	 *            the byte array to push
+	 */
+	public synchronized void pushByteArray(byte[] b) {
+		check();
+		lua_pushbytearray(b);
+	}
+
+	/**
 	 * Pushes an integer value as a number value on the stack.
 	 * 
 	 * @param n
@@ -986,6 +997,22 @@ public class LuaState {
 	public synchronized boolean toBoolean(int index) {
 		check();
 		return lua_toboolean(index) != 0;
+	}
+
+	/**
+	 * Returns the byte array representation of the value at the specified stack
+	 * index. Returns the byte array representation of the value at the
+	 * specified stack index. The value must be a string or a number. If the
+	 * value is a number, it is in place converted to a string. Otherwise, the
+	 * method returns <code>null</code>.
+	 * 
+	 * @param index
+	 *            the stack index
+	 * @return the byte array representation of the value
+	 */
+	public synchronized byte[] toByteArray(int index) {
+		check();
+		return lua_tobytearray(index);
 	}
 
 	/**
@@ -1672,6 +1699,45 @@ public class LuaState {
 	}
 
 	/**
+	 * Checks if the value of the specified function argument is a string or a
+	 * number. If so, the argument value is returned as a byte array. Otherwise,
+	 * the method throws a Lua runtime exception with a descriptive error
+	 * message.
+	 * 
+	 * @param index
+	 *            the argument index
+	 * @return the byte array value
+	 */
+	public synchronized byte[] checkByteArray(int index) {
+		check();
+		if (!isString(index)) {
+			throw getArgTypeException(index, LuaType.STRING);
+		}
+		return toByteArray(index);
+	}
+
+	/**
+	 * Checks if the value of the specified function argument is a string or a
+	 * number. If so, the argument value is returned as a byte array. If the
+	 * value of the specified argument is undefined or <code>nil</code>, the
+	 * method returns the specified default value. Otherwise, the method throws
+	 * a Lua runtime exception with a descriptive error message.
+	 * 
+	 * @param index
+	 *            the argument index
+	 * @param d
+	 *            the default value
+	 * @return the string value, or the default value
+	 */
+	public synchronized byte[] checkString(int index, byte[] d) {
+		check();
+		if (isNoneOrNil(index)) {
+			return d;
+		}
+		return checkByteArray(index);
+	}
+
+	/**
 	 * Checks if the value of the specified function argument is a number or a
 	 * string convertible to a number. If so, the argument value is returned as
 	 * an integer. Otherwise, the method throws a Lua runtime exception with a
@@ -2067,6 +2133,8 @@ public class LuaState {
 
 	private native void lua_pushboolean(int b);
 
+	private native void lua_pushbytearray(byte[] b);
+
 	private native void lua_pushinteger(int n);
 
 	private native void lua_pushjavafunction(JavaFunction f);
@@ -2112,6 +2180,8 @@ public class LuaState {
 	private native int lua_rawequal(int index1, int index2);
 
 	private native int lua_toboolean(int index);
+
+	private native byte[] lua_tobytearray(int index);
 
 	private native int lua_tointeger(int index);
 
