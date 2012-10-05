@@ -58,8 +58,8 @@ Each conversion is assigned a _type distance_. That distance is an indication of
 || `boolean` || `Object` (actual type `Boolean`) || 2 || 
 || `number` || `Byte`, `byte`, `Short`, `short`, `Integer`, `int`, `Long`, `long`, `Float`, `float`, `Double`, `double`, `BigInteger`, `BigDecimal`, `Character`, `char` || 1 ||
 || `number` || `Object` (actual type `Double`) || 2 || 
-|| `number` || `String` || 3 || 
-|| `string` || `String` || 1 || 
+|| `number` || `String`, `byte[]` || 3 || 
+|| `string` || `String`, `byte[]` || 1 || 
 || `string` || `Object` (actual type `String`) || 2 || 
 || `string` || `Byte`, `byte`, `Short`, `short`, `Integer`, `int`, `Long`, `long`, `Float`, `float`, `Double`, `double`, `BigInteger`, `BigDecimal`, `Character`, `char` || 3 ||
 || `table` || `Map`, `List`, any array type || 1 || 
