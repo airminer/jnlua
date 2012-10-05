@@ -22,6 +22,7 @@ public class TestObject implements Comparable<TestObject> {
 	 * Public test fields for all types.
 	 */
 	public boolean booleanField;
+	public byte[] byteArrayField;
 	public byte byteField;
 	public short shortField;
 	public int intField;
