@@ -3,6 +3,13 @@ README for JNLua
 For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 
+* Release 0.9.5
+
+- Added transparent conversion between Lua strings and Java byte arrays.
+This may break existing code that passes byte arrays from Java to Lua, or calls
+Java methods with signatures expecting a byte array from Lua.
+
+
 * Release 0.9.4 (2012-01-29)
 
 - Added a javavm module, allowing to create a Java VM from Lua.
