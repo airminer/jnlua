@@ -830,6 +830,9 @@ public class LuaStateTest extends AbstractLuaTest {
 		makeStack();
 		assertFalse(luaState.checkBoolean(2));
 		assertTrue(luaState.checkBoolean(1, true));
+		assertArrayEquals(new byte[] { 't', 'e', 's', 't' },
+				luaState.checkByteArray(4));
+		assertArrayEquals(new byte[1], luaState.checkByteArray(1, new byte[1]));
 		assertEquals(1, luaState.checkInteger(3));
 		assertEquals(1, luaState.checkInteger(1, 1));
 		assertEquals(1.0, luaState.checkNumber(3), 0.0);
