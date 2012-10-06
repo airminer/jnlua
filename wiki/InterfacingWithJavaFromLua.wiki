@@ -80,6 +80,12 @@ Note that for each Lua type, there is a conversion to `Object`. Therefore, reque
 
 The interface `LuaValueProxy` is a generic proxy for any type of Lua value. The proxy allows pushing its proxied value on the Lua stack, thus making the value accessible on demand. Proxies are currently implemented by means of the Lua Auxiliary Library _reference system_ and Java _phantom references_. After the Java garbage collector has finalized a Lua value proxy that is no longer in use, the proxy becomes _phantom reachable_. At that point, its reference will be removed in Lua upon the next JNLua API call. This design ensures that there are no asynchronous calls from a Java garbage collector thread into Lua.
 
+As of JNLua 0.9.5 and 1.0.3, Java byte arrays are transparently converted to and from Lua strings. While Java has a strong distinction between binary information (`byte`, `byte[]`) and textual information (`char`, `String`), Lua uses strings to hold both binary and textual information. In case the transparent conversion causes issues with existing code, the following options are available to address such situations:
+
+  * Set the system property `com.naef.jnlua.rawByteArray` to `true`. This disables the transparent conversion in the default converter and restores the behavior of previous versions where Java byte arrays are passed raw. You can still pass a byte array as a string by explicitly invoking the `pushByteArray` and `toByteArray` methods on the Lua state.
+  * (If the system property is not set; default.) Use the Lua state methods `pushJavaObjectRaw` and `toJavaObjectRaw` to explicitly pass a Java byte array in raw form, bypassing the converter. Use the `java.cast` function to resolve ambivalence when invoking same-name methods with both a `String` and `byte[]` signature.
+  * Adapt your own converter, as explained in the next section.
+
 =Implementing Custom Java Reflection and Conversion=
 
 The Java reflection and conversion can be customized by providing custom implementations of the `JavaReflector` and `Converter` interfaces. The custom implementations are then configured in the Lua state by invoking the `LuaState.setJavaReflector()` and `LuaState.setConverter()` methods.
