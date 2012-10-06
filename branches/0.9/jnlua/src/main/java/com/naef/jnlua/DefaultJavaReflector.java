@@ -155,11 +155,11 @@ public class DefaultJavaReflector implements JavaReflector {
 				continue;
 			}
 
-			// Find the method in an interface if the declaring class is not
-			// public
+			// Attempt to find the method in a public class if the declaring
+			// class is not public
 			if (!Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
-				method = getInterfaceMethod(clazz, method.getName(), method
-						.getParameterTypes());
+				method = getPublicClassMethod(clazz, method.getName(),
+						method.getParameterTypes());
 				if (method == null) {
 					continue;
 				}
@@ -226,14 +226,14 @@ public class DefaultJavaReflector implements JavaReflector {
 				continue;
 			}
 
-			// Find the read/write methods in an interface if the declaring
-			// class is not public
+			// Attempt to find the read/write methods in a public class if the
+			// declaring class is not public
 			Method method = propertyDescriptors[i].getReadMethod();
 			if (method != null
 					&& !Modifier.isPublic(method.getDeclaringClass()
 							.getModifiers())) {
-				method = getInterfaceMethod(clazz, method.getName(), method
-						.getParameterTypes());
+				method = getPublicClassMethod(clazz, method.getName(),
+						method.getParameterTypes());
 				try {
 					propertyDescriptors[i].setReadMethod(method);
 				} catch (IntrospectionException e) {
@@ -243,8 +243,8 @@ public class DefaultJavaReflector implements JavaReflector {
 			if (method != null
 					&& !Modifier.isPublic(method.getDeclaringClass()
 							.getModifiers())) {
-				method = getInterfaceMethod(clazz, method.getName(), method
-						.getParameterTypes());
+				method = getInterfaceMethod(clazz, method.getName(),
+						method.getParameterTypes());
 				try {
 					propertyDescriptors[i].setWriteMethod(method);
 				} catch (IntrospectionException e) {
@@ -260,6 +260,52 @@ public class DefaultJavaReflector implements JavaReflector {
 					clazz, propertyDescriptors[i]));
 		}
 		return result;
+	}
+
+	/**
+	 * Returns a public class method matching a method name and parameter list.
+	 * The public class can be a superclass or interface.
+	 */
+	private Method getPublicClassMethod(Class<?> clazz, String methodName,
+			Class<?>[] parameterTypes) {
+		Method method = getPublicSuperclassMethod(clazz, methodName,
+				parameterTypes);
+		if (method != null) {
+			return method;
+		}
+		return getInterfaceMethod(clazz, methodName, parameterTypes);
+	}
+
+	/**
+	 * Returns a public superclass method matching a method name and parameter
+	 * list.
+	 */
+	private Method getPublicSuperclassMethod(Class<?> clazz, String methodName,
+			Class<?>[] parameterTypes) {
+		Class<?> superclass = clazz.getSuperclass();
+		while (superclass != null) {
+			// Ignore non-public superclasses
+			if (!Modifier.isPublic(superclass.getModifiers())) {
+				continue;
+			}
+
+			// Find method in superclass
+			try {
+				Method method = superclass.getDeclaredMethod(methodName,
+						parameterTypes);
+				if (Modifier.isPublic(method.getModifiers())) {
+					return method;
+				}
+			} catch (NoSuchMethodException e) {
+				// Not found
+			}
+
+			// Check superclass
+			superclass = superclass.getSuperclass();
+		}
+
+		// Not found
+		return null;
 	}
 
 	/**
@@ -323,8 +369,8 @@ public class DefaultJavaReflector implements JavaReflector {
 			if (objectClass.isArray()) {
 				if (!luaState.isNumber(2)) {
 					throw new LuaRuntimeException(String.format(
-							"attempt to read array with %s accessor", luaState
-									.typeName(2)));
+							"attempt to read array with %s accessor",
+							luaState.typeName(2)));
 				}
 				int index = luaState.toInteger(2);
 				int length = Array.getLength(object);
@@ -349,10 +395,9 @@ public class DefaultJavaReflector implements JavaReflector {
 			Accessor accessor = objectAccessors.get(key);
 			if (accessor == null) {
 				throw new LuaRuntimeException(
-						String
-								.format(
-										"attempt to read class %s with accessor '%s' (undefined)",
-										objectClass.getCanonicalName(), key));
+						String.format(
+								"attempt to read class %s with accessor '%s' (undefined)",
+								objectClass.getCanonicalName(), key));
 			}
 			accessor.read(luaState, object);
 			return 1;
@@ -372,8 +417,8 @@ public class DefaultJavaReflector implements JavaReflector {
 			if (objectClass.isArray()) {
 				if (!luaState.isNumber(2)) {
 					throw new LuaRuntimeException(String.format(
-							"attempt to write array with %s accessor", luaState
-									.typeName(2)));
+							"attempt to write array with %s accessor",
+							luaState.typeName(2)));
 				}
 				int index = luaState.toInteger(2);
 				int length = Array.getLength(object);
@@ -385,11 +430,10 @@ public class DefaultJavaReflector implements JavaReflector {
 				Class<?> componentType = objectClass.getComponentType();
 				if (!luaState.isJavaObject(3, componentType)) {
 					throw new LuaRuntimeException(
-							String
-									.format(
-											"attempt to write array of %s at index %d with %s value",
-											componentType.getCanonicalName(),
-											luaState.typeName(3)));
+							String.format(
+									"attempt to write array of %s at index %d with %s value",
+									componentType.getCanonicalName(),
+									luaState.typeName(3)));
 				}
 				Object value = luaState.toJavaObject(3, componentType);
 				Array.set(object, index - 1, value);
@@ -408,10 +452,9 @@ public class DefaultJavaReflector implements JavaReflector {
 			Accessor accessor = objectAccessors.get(key);
 			if (accessor == null) {
 				throw new LuaRuntimeException(
-						String
-								.format(
-										"attempt to write class %s with accessor '%s' (undefined)",
-										objectClass.getCanonicalName(), key));
+						String.format(
+								"attempt to write class %s with accessor '%s' (undefined)",
+								objectClass.getCanonicalName(), key));
 			}
 			accessor.write(luaState, object);
 			return 0;
@@ -457,8 +500,8 @@ public class DefaultJavaReflector implements JavaReflector {
 		public int invoke(LuaState luaState) {
 			if (!luaState.isJavaObject(1, Comparable.class)) {
 				throw new LuaRuntimeException(String.format(
-						"class %s does not implement Comparable", luaState
-								.typeName(1)));
+						"class %s does not implement Comparable",
+						luaState.typeName(1)));
 			}
 			Comparable<Object> comparable = luaState.toJavaObject(1,
 					Comparable.class);
@@ -477,8 +520,8 @@ public class DefaultJavaReflector implements JavaReflector {
 		public int invoke(LuaState luaState) {
 			if (!luaState.isJavaObject(1, Comparable.class)) {
 				throw new LuaRuntimeException(String.format(
-						"class %s does not implement Comparable", luaState
-								.typeName(1)));
+						"class %s does not implement Comparable",
+						luaState.typeName(1)));
 			}
 			Comparable<Object> comparable = luaState.toJavaObject(1,
 					Comparable.class);
@@ -749,8 +792,9 @@ public class DefaultJavaReflector implements JavaReflector {
 			Object object = luaState.checkJavaObject(1, Object.class);
 			Class<?> objectClass = getObjectClass(object);
 			luaState.checkArg(1, clazz.isAssignableFrom(objectClass), String
-					.format("class %s is not a subclass of %s", objectClass
-							.getCanonicalName(), clazz.getCanonicalName()));
+					.format("class %s is not a subclass of %s",
+							objectClass.getCanonicalName(),
+							clazz.getCanonicalName()));
 			if (objectClass == object) {
 				object = null;
 			}
@@ -784,21 +828,23 @@ public class DefaultJavaReflector implements JavaReflector {
 			Object[] arguments = new Object[parameterCount];
 			if (invocable.isVarArgs()) {
 				for (int i = 0; i < parameterCount - 1; i++) {
-					arguments[i] = luaState.toJavaObject(i + 2, invocable
-							.getParameterType(i));
+					arguments[i] = luaState.toJavaObject(i + 2,
+							invocable.getParameterType(i));
 				}
-				arguments[parameterCount - 1] = Array.newInstance(invocable
-						.getParameterType(parameterCount - 1), argCount
-						- (parameterCount - 1));
+				arguments[parameterCount - 1] = Array.newInstance(
+						invocable.getParameterType(parameterCount - 1),
+						argCount - (parameterCount - 1));
 				for (int i = parameterCount - 1; i < argCount; i++) {
-					Array.set(arguments[parameterCount - 1], i
-							- (parameterCount - 1), luaState.toJavaObject(
-							i + 2, invocable.getParameterType(i)));
+					Array.set(
+							arguments[parameterCount - 1],
+							i - (parameterCount - 1),
+							luaState.toJavaObject(i + 2,
+									invocable.getParameterType(i)));
 				}
 			} else {
 				for (int i = 0; i < parameterCount; i++) {
-					arguments[i] = luaState.toJavaObject(i + 2, invocable
-							.getParameterType(i));
+					arguments[i] = luaState.toJavaObject(i + 2,
+							invocable.getParameterType(i));
 				}
 			}
 
@@ -933,8 +979,10 @@ public class DefaultJavaReflector implements JavaReflector {
 					if (other == invocable) {
 						continue;
 					}
-					int parameterCount = Math.min(argCount, Math.max(invocable
-							.getParameterCount(), other.getParameterCount()));
+					int parameterCount = Math.min(
+							argCount,
+							Math.max(invocable.getParameterCount(),
+									other.getParameterCount()));
 					boolean delta = false;
 					for (int j = 0; j < parameterCount; j++) {
 						int distance = converter.getTypeDistance(luaState,
@@ -967,8 +1015,10 @@ public class DefaultJavaReflector implements JavaReflector {
 					if (other == invocable) {
 						continue;
 					}
-					int parameterCount = Math.min(argCount, Math.max(invocable
-							.getParameterCount(), other.getParameterCount()));
+					int parameterCount = Math.min(
+							argCount,
+							Math.max(invocable.getParameterCount(),
+									other.getParameterCount()));
 					boolean delta = false;
 					for (int j = 0; j < parameterCount; j++) {
 						Class<?> type = invocable.getParameterType(j);
@@ -1010,8 +1060,8 @@ public class DefaultJavaReflector implements JavaReflector {
 		private LuaRuntimeException getSignatureMismatchException(
 				LuaState luaState) {
 			return new LuaRuntimeException(String.format(
-					"no %s of class %s matches '%s(%s)'", getWhat(), clazz
-							.getCanonicalName(), getName(),
+					"no %s of class %s matches '%s(%s)'", getWhat(),
+					clazz.getCanonicalName(), getName(),
 					getLuaSignatureString(luaState)));
 		}
 
@@ -1024,8 +1074,8 @@ public class DefaultJavaReflector implements JavaReflector {
 			StringBuffer sb = new StringBuffer();
 			sb.append(String.format(
 					"%s '%s(%s)' on class %s is ambivalent among ", getWhat(),
-					getName(), getLuaSignatureString(luaState), clazz
-							.getCanonicalName()));
+					getName(), getLuaSignatureString(luaState),
+					clazz.getCanonicalName()));
 			boolean first = true;
 			for (Invocable invocable : candidates) {
 				if (first) {
@@ -1092,11 +1142,10 @@ public class DefaultJavaReflector implements JavaReflector {
 		public void read(LuaState luaState, Object object) {
 			if (propertyDescriptor.getReadMethod() == null) {
 				throw new LuaRuntimeException(
-						String
-								.format(
-										"attempt to read class %s with accessor '%s' (a write-only property)",
-										clazz.getCanonicalName(),
-										propertyDescriptor.getName()));
+						String.format(
+								"attempt to read class %s with accessor '%s' (a write-only property)",
+								clazz.getCanonicalName(),
+								propertyDescriptor.getName()));
 			}
 			try {
 				luaState.pushJavaObject(propertyDescriptor.getReadMethod()
@@ -1114,15 +1163,14 @@ public class DefaultJavaReflector implements JavaReflector {
 		public void write(LuaState luaState, Object object) {
 			if (propertyDescriptor.getWriteMethod() == null) {
 				throw new LuaRuntimeException(
-						String
-								.format(
-										"attempt to write class %s with acessor '%s' (a read-only property)",
-										clazz.getCanonicalName(),
-										propertyDescriptor.getName()));
+						String.format(
+								"attempt to write class %s with acessor '%s' (a read-only property)",
+								clazz.getCanonicalName(),
+								propertyDescriptor.getName()));
 			}
 			try {
-				Object value = luaState.checkJavaObject(-1, propertyDescriptor
-						.getPropertyType());
+				Object value = luaState.checkJavaObject(-1,
+						propertyDescriptor.getPropertyType());
 				propertyDescriptor.getWriteMethod().invoke(object, value);
 			} catch (IllegalArgumentException e) {
 				throw new RuntimeException(e);
