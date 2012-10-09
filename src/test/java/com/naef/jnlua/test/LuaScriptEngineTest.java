@@ -30,11 +30,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LuaScriptEngineTest {
-	// -- State
+	// ---- State
 	private ScriptEngineManager scriptEngineManager;
 	private ScriptEngine scriptEngine;
 
-	// -- Setup
+	// ---- Setup
 	/**
 	 * Performs setup.
 	 */
@@ -44,7 +44,7 @@ public class LuaScriptEngineTest {
 		scriptEngine = scriptEngineManager.getEngineByName("Lua");
 	}
 
-	// -- Test cases
+	// -- Unit tests
 	/**
 	 * Tests the acquisition of the Lua script engine from the manager.
 	 */
@@ -72,7 +72,7 @@ public class LuaScriptEngineTest {
 		assertEquals("JNLua", factory.getEngineName());
 
 		// getEngineVersion()
-		assertEquals("1.0", factory.getEngineVersion());
+		assertEquals("0.9", factory.getEngineVersion());
 
 		// getNames()
 		List<String> names = factory.getNames();
@@ -85,7 +85,7 @@ public class LuaScriptEngineTest {
 		assertEquals("Lua", factory.getLanguageName());
 
 		// getLanguageVersion()
-		assertEquals("5.2", factory.getLanguageVersion());
+		assertEquals("5.1", factory.getLanguageVersion());
 
 		// getExtensions()
 		List<String> extensions = factory.getExtensions();

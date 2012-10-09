@@ -85,9 +85,9 @@ public class LuaConsole {
 		luaState.openLibs();
 
 		// Set buffer mode
-		luaState.load("io.stdout:setvbuf(\"no\")", "=consoleInitStdout");
+		luaState.load("io.stdout:setvbuf(\"no\")", "setvbuf");
 		luaState.call(0, 0);
-		luaState.load("io.stderr:setvbuf(\"no\")", "=consoleInitStderr");
+		luaState.load("io.stderr:setvbuf(\"no\")", "setvbuf");
 		luaState.call(0, 0);
 	}
 
@@ -163,7 +163,7 @@ public class LuaConsole {
 		try {
 			long start = System.nanoTime();
 			luaState.setTop(0);
-			luaState.load(in, "=console", "t");
+			luaState.load(in, "console");
 			luaState.call(0, LuaState.MULTRET);
 			long stop = System.nanoTime();
 			for (int i = 1; i <= luaState.getTop(); i++) {
@@ -187,6 +187,7 @@ public class LuaConsole {
 			System.out.println();
 		} catch (LuaRuntimeException e) {
 			e.printLuaStackTrace();
+			e.printStackTrace();
 		} catch (LuaException e) {
 			System.err.println(e.getMessage());
 		}
