@@ -3,7 +3,7 @@ README for JNLua
 For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 
-* Release 0.9.5
+* Release 0.9.5 (2012-10-09)
 
 - Added transparent conversion between Lua strings and Java byte arrays.
 This may break existing code that passes byte arrays between Java and Lua.
