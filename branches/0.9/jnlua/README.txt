@@ -3,6 +3,12 @@ README for JNLua
 For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 
+* Release 0.9.6
+
+- Corrected an issue where method dispatch would enter an endless loop on
+non-public superclasses.
+
+
 * Release 0.9.5 (2012-10-09)
 
 - Added transparent conversion between Lua strings and Java byte arrays.
