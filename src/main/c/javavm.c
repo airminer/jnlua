@@ -73,7 +73,7 @@ static int release_vm (lua_State *L) {
 	JNIEnv *env;
 	int res;
 	int i;
-	
+
 	/* Get VM */
 	vm = luaL_checkudata(L, 1, JAVAVM_METATABLE);
 	
@@ -191,7 +191,7 @@ static int create_vm (lua_State *L) {
 	/* Create a LuaState in the Java VM */
 	if (!(luastate_class = (*env)->FindClass(env, "com/naef/jnlua/LuaState"))
 			|| !(init_id = (*env)->GetMethodID(env, luastate_class, "<init>", "(J)V"))) {
-		return error(L, env, "JNLua not found");
+		return error(L, env, "LuaState not found");
 	}
 	luastate = (*env)->NewObject(env, luastate_class, init_id, (jlong) (uintptr_t) L);
 	if (!luastate) {
@@ -213,7 +213,6 @@ static int create_vm (lua_State *L) {
 	if ((*env)->ExceptionCheck(env)) {
 		return error(L, env, "error loading Java module");
 	}
-	lua_pop(L, 1);
 	
 	/* Store VM */
 	lua_pushvalue(L, -1);
@@ -269,7 +268,7 @@ static const luaL_Reg functions[] = {
  
 LUALIB_API int luaopen_javavm (lua_State *L) {
 	/* Create module */
-	luaL_newlib(L, functions);
+	luaL_register(L, lua_tostring(L, -1), functions);
 	
 	/* Create metatable */
 	luaL_newmetatable(L, JAVAVM_METATABLE);

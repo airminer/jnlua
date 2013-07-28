@@ -34,7 +34,7 @@ class CompiledLuaScript extends CompiledScript {
 	@Override
 	public Object eval(ScriptContext context) throws ScriptException {
 		synchronized (engine.getLuaState()) {
-			engine.loadChunk(new ByteArrayInputStream(script), context, "b");
+			engine.loadChunk(new ByteArrayInputStream(script), context);
 			return engine.callChunk(context);
 		}
 	}
