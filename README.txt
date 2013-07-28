@@ -3,6 +3,11 @@ README for JNLua
 For information about JNLua, please visit http://code.google.com/p/jnlua/.
 
 
+* Release 0.9.7
+
+- Corrected an issue where an array access error message would fail to format.
+
+
 * Release 0.9.6 (2013-07-28)
 
 - Corrected an issue where method dispatch would enter an endless loop on
