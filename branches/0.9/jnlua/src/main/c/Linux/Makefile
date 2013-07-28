@@ -1,5 +1,5 @@
 # Paths
-JDK_DIR=/opt/jdk/jdk1.6.0_18
+JDK_DIR=/usr/lib/jvm/java-6-openjdk-i386
 LUA_LIB_DIR=/usr/lib
 LUA_INC_DIR=/usr/include/lua5.1
 VERSION=5.1
