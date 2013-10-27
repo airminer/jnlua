@@ -2,6 +2,8 @@
 
 = Overview =
 
+Max Raskin has done a port of JNLua for the [https://code.google.com/p/jnlua-android Android platform].
+
 Ignazio Di Napoli has collected the following notes for porting JNLua (and Lua) to the Android platform:
 
   * Modify Lua source code (locales are not supported in native SDK)
