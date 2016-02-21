@@ -1,6 +1,6 @@
 README for JNlua
 
-For information about JNLua, please visit http://code.google.com/p/jnlua/.
+For information about JNLua, please visit https://github.com/airminer/jnlua.
 
 
 * Release 1.0.5
